@@ -1,0 +1,13 @@
+[package]
+name = "recipe-graphql-axum"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+axum = { workspace = true }
+async-graphql = { workspace = true }
+async-graphql-axum = { workspace = true }
+tokio = { workspace = true, features = ["macros", "rt-multi-thread"] }
+
+recipe-db = { path = "../recipe-db" }
+recipe-graphql = { path = "../recipe-graphql" }

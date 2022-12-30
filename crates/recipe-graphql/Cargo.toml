@@ -1,0 +1,12 @@
+[package]
+name = "recipe-graphql"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+async-graphql = { workspace = true, features = ["dataloader"] }
+bigdecimal = { workspace = true }
+futures-util = { workspace = true }
+tokio = { workspace = true }
+
+recipe-db = { path = "../recipe-db" }
