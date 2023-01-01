@@ -29,7 +29,7 @@ struct Index {
 }
 
 #[cfg(not(debug_assertions))]
-static INDEX: Lazy<Index> = Lazy::new(|| {
+static INDEX: once_cell::sync::Lazy<Index> = once_cell::sync::Lazy::new(|| {
     let index_bytes = Assets::get("assets/index.html").unwrap().data;
     let index = std::str::from_utf8(index_bytes.borrow()).unwrap();
     let (prefix, suffix) = index.split_once(r#"<div id="main">"#).unwrap();
