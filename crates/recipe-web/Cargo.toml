@@ -1,0 +1,12 @@
+[package]
+name = "recipe-web"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+dioxus = { workspace = true, features = ["web"] }
+dioxus-logger = "0.3.0"
+getrandom = { version = "0.2.8", features = ["js"] }
+log = "0.4.17"
+recipe-app = { workspace = true }
+web-sys = "0.3.60"

@@ -1,0 +1,50 @@
+
+
+
+type Ingredient {
+	id: ID!
+	name: String!
+	slug: String!
+	defaultMeasurement: Measurement
+	recipeIngredients: [RecipeIngredient!]
+}
+
+
+type Measurement {
+	id: ID!
+	name: String!
+	slug: String!
+	abbreviation: String
+}
+
+type QueryRoot {
+	recipe(id: ID!): Recipe
+	ingredient(id: ID!): Ingredient
+	recipes: [Recipe!]!
+	ingredients: [Ingredient!]!
+	measurements: [Measurement!]!
+}
+
+type Recipe {
+	id: ID!
+	name: String!
+	source: String
+	notes: String
+	prepTimeMinutes: Int
+	cookingTimeMinutes: Int
+	ingredients: [RecipeIngredient!]!
+}
+
+type RecipeIngredient {
+	recipeId: ID!
+	ingredientId: ID!
+	recipe: Recipe
+	ingredient: Ingredient
+	quantity: Float
+	measurement: Measurement
+}
+
+
+schema {
+	query: QueryRoot
+}

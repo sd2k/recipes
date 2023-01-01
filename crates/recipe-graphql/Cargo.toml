@@ -7,6 +7,5 @@ edition = "2021"
 async-graphql = { workspace = true, features = ["dataloader"] }
 bigdecimal = { workspace = true }
 futures-util = { workspace = true }
+recipe-db = { workspace = true }
 tokio = { workspace = true }
-
-recipe-db = { path = "../recipe-db" }

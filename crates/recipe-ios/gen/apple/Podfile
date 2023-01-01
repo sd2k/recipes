@@ -1,0 +1,14 @@
+# Uncomment the next line to define a global platform for your project
+
+target 'recipe-ios_iOS' do
+platform :ios, '9.0'
+  
+
+  # Pods for recipe-ios_iOS
+end
+
+target 'recipe-ios_macOS' do
+platform :osx, '11.0'
+
+  # Pods for recipe-ios_macOS
+end

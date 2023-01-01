@@ -1,0 +1,109 @@
+name: recipe-ios
+options:
+  bundleIdPrefix: io.bsull
+  deploymentTarget:
+    iOS: 9.0
+    macOS: 11.0
+fileGroups: [../../src]
+configs:
+  debug: debug
+  release: release
+settingGroups:
+  app:
+    base:
+      PRODUCT_NAME: recipe-ios
+      PRODUCT_BUNDLE_IDENTIFIER: io.bsull.recipe-ios
+      DEVELOPMENT_TEAM: ben.sully88@gmail.com
+targetTemplates:
+  app:
+    type: application
+    sources:
+      - path: Sources
+    scheme:
+      environmentVariables:
+        RUST_BACKTRACE: full
+        RUST_LOG: info
+    settings:
+      groups: [app]
+targets:
+  recipe-ios_iOS:
+    type: application
+    platform: iOS
+    sources:
+      - path: Sources
+      - path: assets
+        buildPhase: resources
+        type: folder
+    info:
+      path: recipe-ios_iOS/Info.plist
+      properties:
+        LSRequiresIPhoneOS: true
+        UILaunchStoryboardName: LaunchScreen
+        UIRequiredDeviceCapabilities: [arm64, metal]
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        CFBundleShortVersionString: 1.0.0
+        CFBundleVersion: 1.0.0
+    scheme:
+      environmentVariables:
+        RUST_BACKTRACE: full
+        RUST_LOG: info
+    settings:
+      base:
+        ENABLE_BITCODE: false
+        ARCHS: [arm64, x86_64]
+        VALID_ARCHS: arm64  x86_64 
+        LIBRARY_SEARCH_PATHS[sdk=iphoneos*]: $(inherited) "/Users/ben/repos/personal/recipes/crates/recipe-ios/target/aarch64-apple-ios/$(CONFIGURATION)"
+        LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]: $(inherited) "/Users/ben/repos/personal/recipes/crates/recipe-ios/target/x86_64-apple-ios/$(CONFIGURATION)"
+        ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: true
+      groups: [app]
+    dependencies:
+      - framework: librecipe_ios.a
+        embed: false
+      - sdk: CoreGraphics.framework
+      - sdk: Metal.framework
+      - sdk: MetalKit.framework
+      - sdk: QuartzCore.framework
+      - sdk: Security.framework
+      - sdk: UIKit.framework
+    preBuildScripts:
+      - script: ${HOME}/.cargo/bin/cargo-apple xcode-script -v --platform ${PLATFORM_DISPLAY_NAME:?} --sdk-root ${SDKROOT:?} --framework-search-paths "${FRAMEWORK_SEARCH_PATHS:?}" --header-search-paths "${HEADER_SEARCH_PATHS:?}" --gcc-preprocessor-definitions "${GCC_PREPROCESSOR_DEFINITIONS:?}" --configuration ${CONFIGURATION:?} ${FORCE_COLOR} ${ARCHS:?} ${FEATURES}
+        name: Build Rust Code
+        basedOnDependencyAnalysis: false
+        outputFiles:
+          - $(SRCROOT)/target/aarch64-apple-ios/${CONFIGURATION}/deps/librecipe_ios.a
+          - $(SRCROOT)/target/x86_64-apple-ios/${CONFIGURATION}/deps/librecipe_ios.a
+  recipe-ios_macOS:
+    type: application
+    platform: macOS
+    sources: Sources
+    info:
+      path: recipe-ios_macOS/Info.plist
+      properties:
+        NSHighResolutionCapable: true
+    scheme:
+      environmentVariables:
+        RUST_BACKTRACE: full
+        RUST_LOG: info
+    settings:
+      base:
+        LIBRARY_SEARCH_PATHS: $(inherited) "/Users/ben/repos/personal/recipes/crates/recipe-ios/target/x86_64-apple-darwin/$(CONFIGURATION)"
+      groups: [app]
+    dependencies:
+      - framework: librecipe_ios.a
+        embed: false
+      - sdk: Metal.framework
+    preBuildScripts:
+      - script: ${HOME}/.cargo/bin/cargo-apple xcode-script -v --platform ${PLATFORM_DISPLAY_NAME:?} --sdk-root ${SDKROOT:?} --framework-search-paths "${FRAMEWORK_SEARCH_PATHS:?}" --header-search-paths "${HEADER_SEARCH_PATHS:?}" --gcc-preprocessor-definitions "${GCC_PREPROCESSOR_DEFINITIONS:?}" --configuration ${CONFIGURATION:?} ${FORCE_COLOR} ${ARCHS:?} ${FEATURES}
+        name: Build Rust Code
+        basedOnDependencyAnalysis: false
+        outputFiles:
+          - $(SRCROOT)/target/x86_64-apple-darwin/${CONFIGURATION}/deps/librecipe_ios.a
+    

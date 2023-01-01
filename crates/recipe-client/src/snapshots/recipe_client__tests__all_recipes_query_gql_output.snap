@@ -1,0 +1,22 @@
+---
+source: crates/recipe-queries/src/lib.rs
+expression: operation.query
+---
+query {
+  recipes {
+    id
+    name
+    source
+    notes
+    ingredients {
+      quantity
+      measurement {
+        abbreviation
+      }
+    }
+    prepTimeMinutes
+    cookingTimeMinutes
+  }
+}
+
+

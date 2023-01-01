@@ -1,0 +1,14 @@
+[package]
+name = "recipe-shuttle"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+async-trait.workspace = true
+axum = "0.6.1"
+recipe-db = { workspace = true }
+recipe-graphql = { workspace = true }
+recipe-server = { workspace = true }
+shuttle-service = { version = "0.8.0", features = ["web-axum"] }
+sync_wrapper = "0.1.1"

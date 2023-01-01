@@ -1,0 +1,26 @@
+[package]
+name = "recipe-server"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+axum = { workspace = true, features = ["macros"] }
+async-graphql = { workspace = true }
+async-graphql-axum = { workspace = true }
+dioxus = { workspace = true, features = ["ssr"] }
+mime_guess = "2.0.4"
+once_cell = "1.17.0"
+recipe-app = { workspace = true }
+recipe-client = { workspace = true }
+recipe-db = { workspace = true }
+recipe-graphql = { workspace = true }
+reqwest = { workspace = true, default-features = false }
+rust-embed = { version = "6.4.2", features = ["interpolate-folder-path"] }
+serde_json = "1.0.91"
+tokio = { workspace = true, features = ["macros", "rt-multi-thread", "signal"] }
+tower = { workspace = true }
+tower-http = { workspace = true, features = ["fs", "trace"]}
+tracing.workspace = true
+tracing-error = { workspace = true, features = ["traced-error"] }
+tracing-logfmt = "0.3.0"
+tracing-subscriber = { workspace = true, features = ["env-filter"] }

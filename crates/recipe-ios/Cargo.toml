@@ -1,0 +1,17 @@
+[package]
+name = "recipe-ios"
+version = "0.1.0"
+authors = ["Ben Sully <ben@bsull.io>"]
+edition = "2021"
+
+[lib]
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[[bin]]
+name = "recipe-ios-desktop"
+path = "gen/bin/desktop.rs"
+
+[dependencies]
+dioxus = { workspace = true, features = ["desktop"] }
+mobile-entry-point = "0.1.1"
+simple_logger = "4.0.0"

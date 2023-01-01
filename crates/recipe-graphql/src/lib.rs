@@ -1,6 +1,6 @@
 use async_graphql::{
     dataloader::{DataLoader, Loader},
-    Context, EmptyMutation, EmptySubscription, Error, Object, Result, ID,
+    Context, EmptyMutation, EmptySubscription, Error, Object, Result, SchemaBuilder, ID,
 };
 
 use futures_util::TryStreamExt;
@@ -71,8 +71,12 @@ impl QueryRoot {
 
 pub type Schema = async_graphql::Schema<QueryRoot, EmptyMutation, EmptySubscription>;
 
-pub fn create_schema(pool: recipe_db::DbPool) -> Schema {
+pub fn build_schema() -> SchemaBuilder<QueryRoot, EmptyMutation, EmptySubscription> {
     Schema::build(QueryRoot, EmptyMutation, EmptySubscription)
+}
+
+pub fn create_schema(pool: recipe_db::DbPool) -> Schema {
+    build_schema()
         .data(pool.clone())
         .data(DataLoader::new(
             RecipeLoader::new(pool.clone()),

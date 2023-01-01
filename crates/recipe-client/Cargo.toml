@@ -1,0 +1,13 @@
+[package]
+name = "recipe-client"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+cynic = { version = "2.2.2", features = ["http-reqwest"] }
+
+[build-dependencies]
+recipe-graphql = { workspace = true }
+
+[dev-dependencies]
+insta = { version = "1.23.0", features = ["yaml"] }

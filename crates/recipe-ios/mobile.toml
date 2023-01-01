@@ -1,0 +1,8 @@
+[app]
+name = "recipe-ios"
+stylized-name = "Recipe Ios"
+domain = "bsull.io"
+template-pack = "winit"
+
+[apple]
+development-team = "ben.sully88@gmail.com"
