@@ -3675,7 +3675,7 @@ dependencies = [
 [[package]]
 name = "recipe-app"
 version = "0.1.0"
-source = "git+https://github.com/sd2k/recipes?branch=embed-web#6003e31de01a79b786b4f73ac399a06259bc5ceb"
+source = "git+https://github.com/sd2k/recipes?branch=embed-web#0c95cd73b03986e8ad42302927c6b499744543f7"
 dependencies = [
  "dioxus",
  "fluvio-wasm-timer",
@@ -3697,7 +3697,7 @@ dependencies = [
 [[package]]
 name = "recipe-client"
 version = "0.1.0"
-source = "git+https://github.com/sd2k/recipes?branch=embed-web#6003e31de01a79b786b4f73ac399a06259bc5ceb"
+source = "git+https://github.com/sd2k/recipes?branch=embed-web#0c95cd73b03986e8ad42302927c6b499744543f7"
 dependencies = [
  "cynic",
  "recipe-graphql 0.1.0 (git+https://github.com/sd2k/recipes?branch=embed-web)",
@@ -3720,7 +3720,7 @@ dependencies = [
 [[package]]
 name = "recipe-db"
 version = "0.1.0"
-source = "git+https://github.com/sd2k/recipes?branch=embed-web#6003e31de01a79b786b4f73ac399a06259bc5ceb"
+source = "git+https://github.com/sd2k/recipes?branch=embed-web#0c95cd73b03986e8ad42302927c6b499744543f7"
 dependencies = [
  "anyhow",
  "bigdecimal",
@@ -3754,7 +3754,7 @@ dependencies = [
 [[package]]
 name = "recipe-graphql"
 version = "0.1.0"
-source = "git+https://github.com/sd2k/recipes?branch=embed-web#6003e31de01a79b786b4f73ac399a06259bc5ceb"
+source = "git+https://github.com/sd2k/recipes?branch=embed-web#0c95cd73b03986e8ad42302927c6b499744543f7"
 dependencies = [
  "async-graphql",
  "bigdecimal",
@@ -3802,7 +3802,7 @@ dependencies = [
 [[package]]
 name = "recipe-server"
 version = "0.1.0"
-source = "git+https://github.com/sd2k/recipes?branch=embed-web#6003e31de01a79b786b4f73ac399a06259bc5ceb"
+source = "git+https://github.com/sd2k/recipes?branch=embed-web#0c95cd73b03986e8ad42302927c6b499744543f7"
 dependencies = [
  "async-graphql",
  "async-graphql-axum",
@@ -3859,7 +3859,7 @@ dependencies = [
 [[package]]
 name = "recipe-web"
 version = "0.1.0"
-source = "git+https://github.com/sd2k/recipes?branch=embed-web#6003e31de01a79b786b4f73ac399a06259bc5ceb"
+source = "git+https://github.com/sd2k/recipes?branch=embed-web#0c95cd73b03986e8ad42302927c6b499744543f7"
 dependencies = [
  "anyhow",
  "dioxus",
