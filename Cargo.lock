@@ -3675,7 +3675,7 @@ dependencies = [
 [[package]]
 name = "recipe-app"
 version = "0.1.0"
-source = "git+https://github.com/sd2k/recipes?branch=embed-web#9f8afcdbc0413777b61557102ab7f9b62bbdbff9"
+source = "git+https://github.com/sd2k/recipes?branch=embed-web#6003e31de01a79b786b4f73ac399a06259bc5ceb"
 dependencies = [
  "dioxus",
  "fluvio-wasm-timer",
@@ -3697,7 +3697,7 @@ dependencies = [
 [[package]]
 name = "recipe-client"
 version = "0.1.0"
-source = "git+https://github.com/sd2k/recipes?branch=embed-web#9f8afcdbc0413777b61557102ab7f9b62bbdbff9"
+source = "git+https://github.com/sd2k/recipes?branch=embed-web#6003e31de01a79b786b4f73ac399a06259bc5ceb"
 dependencies = [
  "cynic",
  "recipe-graphql 0.1.0 (git+https://github.com/sd2k/recipes?branch=embed-web)",
@@ -3720,7 +3720,7 @@ dependencies = [
 [[package]]
 name = "recipe-db"
 version = "0.1.0"
-source = "git+https://github.com/sd2k/recipes?branch=embed-web#9f8afcdbc0413777b61557102ab7f9b62bbdbff9"
+source = "git+https://github.com/sd2k/recipes?branch=embed-web#6003e31de01a79b786b4f73ac399a06259bc5ceb"
 dependencies = [
  "anyhow",
  "bigdecimal",
@@ -3754,7 +3754,7 @@ dependencies = [
 [[package]]
 name = "recipe-graphql"
 version = "0.1.0"
-source = "git+https://github.com/sd2k/recipes?branch=embed-web#9f8afcdbc0413777b61557102ab7f9b62bbdbff9"
+source = "git+https://github.com/sd2k/recipes?branch=embed-web#6003e31de01a79b786b4f73ac399a06259bc5ceb"
 dependencies = [
  "async-graphql",
  "bigdecimal",
@@ -3802,7 +3802,7 @@ dependencies = [
 [[package]]
 name = "recipe-server"
 version = "0.1.0"
-source = "git+https://github.com/sd2k/recipes?branch=embed-web#9f8afcdbc0413777b61557102ab7f9b62bbdbff9"
+source = "git+https://github.com/sd2k/recipes?branch=embed-web#6003e31de01a79b786b4f73ac399a06259bc5ceb"
 dependencies = [
  "async-graphql",
  "async-graphql-axum",
@@ -3859,8 +3859,9 @@ dependencies = [
 [[package]]
 name = "recipe-web"
 version = "0.1.0"
-source = "git+https://github.com/sd2k/recipes?branch=embed-web#9f8afcdbc0413777b61557102ab7f9b62bbdbff9"
+source = "git+https://github.com/sd2k/recipes?branch=embed-web#6003e31de01a79b786b4f73ac399a06259bc5ceb"
 dependencies = [
+ "anyhow",
  "dioxus",
  "dioxus-logger",
  "getrandom 0.2.8",
@@ -3868,6 +3869,7 @@ dependencies = [
  "recipe-app 0.1.0 (git+https://github.com/sd2k/recipes?branch=embed-web)",
  "rust-embed",
  "tokio",
+ "trunk",
  "web-sys",
 ]
 
