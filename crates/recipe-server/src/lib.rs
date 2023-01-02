@@ -10,6 +10,7 @@ use axum::{
     Router,
 };
 use dioxus::prelude::*;
+#[cfg(not(feature = "embed"))]
 use rust_embed::RustEmbed;
 use tower::ServiceBuilder;
 use tower_http::ServiceBuilderExt;
@@ -17,7 +18,10 @@ use tracing::info;
 
 use recipe_client::prelude::*;
 use recipe_graphql::Schema;
+#[cfg(feature = "embed")]
+use recipe_web::Assets;
 
+#[cfg(not(feature = "embed"))]
 #[derive(Debug, RustEmbed)]
 #[folder = "$CARGO_MANIFEST_DIR/../recipe-web/dist"]
 #[prefix = "assets/"]
@@ -31,7 +35,7 @@ struct Index {
 #[cfg(not(debug_assertions))]
 static INDEX: once_cell::sync::Lazy<Index> = once_cell::sync::Lazy::new(|| {
     let index_bytes = Assets::get("assets/index.html").unwrap().data;
-    let index = std::str::from_utf8(index_bytes.borrow()).unwrap();
+    let index = std::str::from_utf8(&index_bytes).unwrap();
     let (prefix, suffix) = index.split_once(r#"<div id="main">"#).unwrap();
     Index {
         prefix: prefix.to_string(),

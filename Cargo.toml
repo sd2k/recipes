@@ -15,24 +15,15 @@ diesel = "2.0.2"
 diesel-async = "0.2.0"
 dioxus = "0.2.4"
 futures-util = "0.3.25"
-# recipe-app = { path = "crates/recipe-app" }
-# recipe-client = { path = "crates/recipe-client" }
-# recipe-db = { path = "crates/recipe-db" }
-# recipe-desktop = { path = "crates/recipe-desktop" }
-# recipe-graphql = { path = "crates/recipe-graphql" }
-# recipe-ios = { path = "crates/recipe-ios" }
-# recipe-server = { path = "crates/recipe-server" }
-# recipe-shuttle = { path = "crates/recipe-shuttle" }
-# recipe-web = { path = "crates/recipe-web" }
-recipe-app = { git = "https://github.com/sd2k/recipes" }
-recipe-client = { git = "https://github.com/sd2k/recipes" }
-recipe-db = { git = "https://github.com/sd2k/recipes" }
-recipe-desktop = { git = "https://github.com/sd2k/recipes" }
-recipe-graphql = { git = "https://github.com/sd2k/recipes" }
-recipe-ios = { git = "https://github.com/sd2k/recipes" }
-recipe-server = { git = "https://github.com/sd2k/recipes" }
-recipe-shuttle = { git = "https://github.com/sd2k/recipes" }
-recipe-web = { git = "https://github.com/sd2k/recipes" }
+recipe-app = { path = "crates/recipe-app" }
+recipe-client = { path = "crates/recipe-client" }
+recipe-db = { path = "crates/recipe-db" }
+recipe-desktop = { path = "crates/recipe-desktop" }
+recipe-graphql = { path = "crates/recipe-graphql" }
+recipe-ios = { path = "crates/recipe-ios" }
+recipe-server = { path = "crates/recipe-server" }
+recipe-shuttle = { path = "crates/recipe-shuttle" }
+recipe-web = { path = "crates/recipe-web" }
 reqwest = "0.11.13"
 serde = "1.0.152"
 thiserror = "1.0.38"

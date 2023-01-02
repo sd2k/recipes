@@ -9,4 +9,11 @@ dioxus-logger = "0.3.0"
 getrandom = { version = "0.2.8", features = ["js"] }
 log = "0.4.17"
 recipe-app = { workspace = true }
+rust-embed = { version = "6.4.2", features = ["interpolate-folder-path"], optional = true }
 web-sys = "0.3.60"
+
+[features]
+embed = ["rust-embed"]
+
+[build-dependencies]
+tokio = { workspace = true, features = ["full"] }
