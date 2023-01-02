@@ -15,7 +15,6 @@ recipe-db = { git = "https://github.com/sd2k/recipes", rev = "42479f1ba80a58d5b1
 recipe-graphql = { git = "https://github.com/sd2k/recipes", rev = "42479f1ba80a58d5b1508a37663089891fbfac65" }
 recipe-server = { git = "https://github.com/sd2k/recipes", rev = "42479f1ba80a58d5b1508a37663089891fbfac65", features = ["embed"] }
 shuttle-service = { version = "0.8.0", features = ["web-axum"] }
-shuttle-static-folder = "0.8.0"
 sync_wrapper = "0.1.1"
 
 [patch.crates-io]

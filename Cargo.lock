@@ -2988,7 +2988,6 @@ dependencies = [
  "recipe-graphql 0.1.0 (git+https://github.com/sd2k/recipes?rev=42479f1ba80a58d5b1508a37663089891fbfac65)",
  "recipe-server 0.1.0 (git+https://github.com/sd2k/recipes?rev=42479f1ba80a58d5b1508a37663089891fbfac65)",
  "shuttle-service",
- "shuttle-static-folder",
  "sync_wrapper",
 ]
 
@@ -3476,17 +3475,6 @@ dependencies = [
  "tracing",
  "tracing-subscriber",
  "uuid",
-]
-
-[[package]]
-name = "shuttle-static-folder"
-version = "0.8.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7514bca7dca0ad4cdd181e9a4fb5c2c3402cde9a20516a750a272bca936ac577"
-dependencies = [
- "async-trait",
- "shuttle-service",
- "tokio",
 ]
 
 [[package]]
