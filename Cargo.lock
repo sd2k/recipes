@@ -3015,6 +3015,7 @@ dependencies = [
  "getrandom",
  "log",
  "recipe-app 0.1.0 (git+https://github.com/sd2k/recipes?rev=14828b8998548d022d86308ffa536e0760b1dc2f)",
+ "rust-embed",
  "web-sys",
 ]
 
