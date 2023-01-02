@@ -2,7 +2,6 @@ use async_graphql::http::GraphiQLSource;
 use async_graphql_axum::{GraphQLRequest, GraphQLResponse};
 use axum::{
     body::{boxed, Full},
-    debug_handler,
     extract::State,
     http::{header, Uri},
     response::{self, Html, IntoResponse, Response},
@@ -76,7 +75,6 @@ async fn graphiql() -> impl IntoResponse {
     response::Html(GraphiQLSource::build().endpoint("/graphiql").finish())
 }
 
-#[debug_handler]
 async fn static_handler(uri: Uri) -> Response {
     let path = uri.path().trim_start_matches('/');
 
