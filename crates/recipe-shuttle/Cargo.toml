@@ -14,7 +14,6 @@ axum = "0.6.1"
 recipe-db = { git = "https://github.com/sd2k/recipes", rev = "2f034e805ecb24c6de4049c2e70cbf0afaf29f83" }
 recipe-graphql = { git = "https://github.com/sd2k/recipes", rev = "2f034e805ecb24c6de4049c2e70cbf0afaf29f83" }
 recipe-server = { git = "https://github.com/sd2k/recipes", rev = "2f034e805ecb24c6de4049c2e70cbf0afaf29f83", features = ["embed"] }
-shuttle-secrets = "0.8.0"
 shuttle-service = { version = "0.8.0", features = ["web-axum"] }
 sync_wrapper = "0.1.1"
 

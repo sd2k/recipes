@@ -2987,7 +2987,6 @@ dependencies = [
  "recipe-db 0.1.0 (git+https://github.com/sd2k/recipes?rev=2f034e805ecb24c6de4049c2e70cbf0afaf29f83)",
  "recipe-graphql 0.1.0 (git+https://github.com/sd2k/recipes?rev=2f034e805ecb24c6de4049c2e70cbf0afaf29f83)",
  "recipe-server 0.1.0 (git+https://github.com/sd2k/recipes?rev=2f034e805ecb24c6de4049c2e70cbf0afaf29f83)",
- "shuttle-secrets",
  "shuttle-service",
  "sync_wrapper",
 ]
@@ -3451,17 +3450,6 @@ dependencies = [
  "strum 0.24.1",
  "tracing",
  "uuid",
-]
-
-[[package]]
-name = "shuttle-secrets"
-version = "0.8.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "91183fd726946a4bf5338cd5ebe92c2f6330414d437b5ea122302bcdb47e8fb4"
-dependencies = [
- "async-trait",
- "shuttle-service",
- "tokio",
 ]
 
 [[package]]
