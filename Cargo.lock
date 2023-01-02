@@ -3837,6 +3837,7 @@ dependencies = [
  "recipe-graphql 0.1.0 (git+https://github.com/sd2k/recipes?rev=f5a3b693977daa71f2806ccc989386276b34b481)",
  "recipe-server 0.1.0 (git+https://github.com/sd2k/recipes?rev=f5a3b693977daa71f2806ccc989386276b34b481)",
  "shuttle-service",
+ "shuttle-static-folder",
  "sync_wrapper",
 ]
 
@@ -3844,15 +3845,12 @@ dependencies = [
 name = "recipe-web"
 version = "0.1.0"
 dependencies = [
- "anyhow",
  "dioxus",
  "dioxus-logger",
  "getrandom 0.2.8",
  "log",
  "recipe-app 0.1.0",
  "rust-embed",
- "tokio",
- "trunk",
  "web-sys",
 ]
 
@@ -3867,7 +3865,6 @@ dependencies = [
  "getrandom 0.2.8",
  "log",
  "recipe-app 0.1.0 (git+https://github.com/sd2k/recipes?rev=f5a3b693977daa71f2806ccc989386276b34b481)",
- "rust-embed",
  "tokio",
  "trunk",
  "web-sys",
@@ -4456,6 +4453,17 @@ dependencies = [
  "tracing",
  "tracing-subscriber",
  "uuid",
+]
+
+[[package]]
+name = "shuttle-static-folder"
+version = "0.8.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7514bca7dca0ad4cdd181e9a4fb5c2c3402cde9a20516a750a272bca936ac577"
+dependencies = [
+ "async-trait",
+ "shuttle-service",
+ "tokio",
 ]
 
 [[package]]

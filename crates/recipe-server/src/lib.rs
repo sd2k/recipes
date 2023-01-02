@@ -1,19 +1,20 @@
+use std::{future::ready, path::Path};
+
 use async_graphql::http::GraphiQLSource;
 use async_graphql_axum::{GraphQLRequest, GraphQLResponse};
 use axum::{
     body::{boxed, Full},
     extract::State,
-    http::{header, Uri},
+    http::{header, StatusCode, Uri},
     response::{self, Html, IntoResponse, Response},
-    routing::get,
+    routing::{get, get_service},
     Router,
 };
 use dioxus::prelude::*;
 #[cfg(not(feature = "embed"))]
 use rust_embed::RustEmbed;
 use tower::ServiceBuilder;
-use tower_http::ServiceBuilderExt;
-use tracing::info;
+use tower_http::{services::ServeDir, ServiceBuilderExt};
 
 use recipe_client::prelude::*;
 use recipe_graphql::Schema;
@@ -124,6 +125,17 @@ pub fn create_router() -> Router<AppState> {
     Router::new()
         .route("/graphql", get(graphiql).post(graphql_handler))
         .fallback(static_handler)
+        .layer(ServiceBuilder::new().trace_for_http())
+}
+
+pub fn create_servedir_router(path: &Path) -> Router<AppState> {
+    Router::new()
+        .route("/", get(index_html))
+        .route("/graphql", get(graphiql).post(graphql_handler))
+        .nest_service(
+            "/assets",
+            get_service(ServeDir::new(&path)).handle_error(|_| ready(StatusCode::NOT_FOUND)),
+        )
         .layer(ServiceBuilder::new().trace_for_http())
 }
 

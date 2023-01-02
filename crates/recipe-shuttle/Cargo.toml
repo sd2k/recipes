@@ -9,12 +9,13 @@ async-trait = "0.1.60"
 axum = "0.6.1"
 # recipe-db = { workspace = true }
 # recipe-graphql = { workspace = true }
-# recipe-server = { workspace = true, features = ["embed"] }
+# recipe-server = { workspace = true }
 # Shuttle doesn't work with path dependencies so we need to push all these to git before deploying.
 recipe-db = { git = "https://github.com/sd2k/recipes", rev = "f5a3b693977daa71f2806ccc989386276b34b481" }
 recipe-graphql = { git = "https://github.com/sd2k/recipes", rev = "f5a3b693977daa71f2806ccc989386276b34b481" }
-recipe-server = { git = "https://github.com/sd2k/recipes", rev = "f5a3b693977daa71f2806ccc989386276b34b481", features = ["embed"] }
+recipe-server = { git = "https://github.com/sd2k/recipes", rev = "f5a3b693977daa71f2806ccc989386276b34b481" }
 shuttle-service = { version = "0.8.0", features = ["web-axum"] }
+shuttle-static-folder = "0.8.0"
 sync_wrapper = "0.1.1"
 
 [patch.crates-io]
