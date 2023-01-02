@@ -82,7 +82,6 @@ async fn static_handler(uri: Uri) -> Response {
         return index_html().await;
     }
 
-    info!("path: {}", path);
     match Assets::get(path) {
         Some(content) => {
             let body = boxed(Full::from(content.data));
