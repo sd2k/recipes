@@ -60,11 +60,20 @@ fn get_index() -> Index {
 #[derive(Clone)]
 pub struct AppState {
     schema: Schema,
+    api_url: &'static str,
 }
 
 impl AppState {
     pub fn new(schema: Schema) -> Self {
-        Self { schema }
+        Self {
+            schema,
+            api_url: "http://localhost:8000/graphql",
+        }
+    }
+
+    pub fn with_api_url(mut self, api_url: &'static str) -> Self {
+        self.api_url = api_url;
+        self
     }
 }
 
@@ -76,11 +85,11 @@ async fn graphiql() -> impl IntoResponse {
     response::Html(GraphiQLSource::build().endpoint("/graphiql").finish())
 }
 
-async fn static_handler(uri: Uri) -> Response {
+async fn static_handler(uri: Uri, state: State<AppState>) -> Response {
     let path = uri.path().trim_start_matches('/');
 
     if path.is_empty() {
-        return index_html().await;
+        return index_html(state).await;
     }
 
     match Assets::get(path) {
@@ -93,16 +102,17 @@ async fn static_handler(uri: Uri) -> Response {
                 .body(body)
                 .unwrap()
         }
-        None => index_html().await,
+        None => index_html(state).await,
     }
 }
 
-async fn index_html() -> Response {
+async fn index_html(state: State<AppState>) -> Response {
     // TODO: ideally we would just do a database call and construct the
     // types manually here rather than going through the API.
     let req = AllRecipes::build(()).try_into().unwrap();
+
     let initial_state = reqwest::Client::new()
-        .post("http://localhost:8000/graphql")
+        .post(state.api_url)
         .run_graphql(req)
         .await
         .unwrap()
@@ -111,7 +121,7 @@ async fn index_html() -> Response {
     let mut app = VirtualDom::new_with_props(
         recipe_app::app,
         recipe_app::RootProps {
-            origin: "http://localhost:8000",
+            origin: state.api_url.clone(),
             initial_state,
         },
     );
