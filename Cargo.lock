@@ -3675,13 +3675,13 @@ dependencies = [
 [[package]]
 name = "recipe-app"
 version = "0.1.0"
-source = "git+https://github.com/sd2k/recipes?branch=embed-web#0c95cd73b03986e8ad42302927c6b499744543f7"
+source = "git+https://github.com/sd2k/recipes?rev=f5a3b693977daa71f2806ccc989386276b34b481#f5a3b693977daa71f2806ccc989386276b34b481"
 dependencies = [
  "dioxus",
  "fluvio-wasm-timer",
  "futures-util",
  "log",
- "recipe-client 0.1.0 (git+https://github.com/sd2k/recipes?branch=embed-web)",
+ "recipe-client 0.1.0 (git+https://github.com/sd2k/recipes?rev=f5a3b693977daa71f2806ccc989386276b34b481)",
  "reqwest",
 ]
 
@@ -3697,10 +3697,10 @@ dependencies = [
 [[package]]
 name = "recipe-client"
 version = "0.1.0"
-source = "git+https://github.com/sd2k/recipes?branch=embed-web#0c95cd73b03986e8ad42302927c6b499744543f7"
+source = "git+https://github.com/sd2k/recipes?rev=f5a3b693977daa71f2806ccc989386276b34b481#f5a3b693977daa71f2806ccc989386276b34b481"
 dependencies = [
  "cynic",
- "recipe-graphql 0.1.0 (git+https://github.com/sd2k/recipes?branch=embed-web)",
+ "recipe-graphql 0.1.0 (git+https://github.com/sd2k/recipes?rev=f5a3b693977daa71f2806ccc989386276b34b481)",
 ]
 
 [[package]]
@@ -3720,7 +3720,7 @@ dependencies = [
 [[package]]
 name = "recipe-db"
 version = "0.1.0"
-source = "git+https://github.com/sd2k/recipes?branch=embed-web#0c95cd73b03986e8ad42302927c6b499744543f7"
+source = "git+https://github.com/sd2k/recipes?rev=f5a3b693977daa71f2806ccc989386276b34b481#f5a3b693977daa71f2806ccc989386276b34b481"
 dependencies = [
  "anyhow",
  "bigdecimal",
@@ -3754,12 +3754,12 @@ dependencies = [
 [[package]]
 name = "recipe-graphql"
 version = "0.1.0"
-source = "git+https://github.com/sd2k/recipes?branch=embed-web#0c95cd73b03986e8ad42302927c6b499744543f7"
+source = "git+https://github.com/sd2k/recipes?rev=f5a3b693977daa71f2806ccc989386276b34b481#f5a3b693977daa71f2806ccc989386276b34b481"
 dependencies = [
  "async-graphql",
  "bigdecimal",
  "futures-util",
- "recipe-db 0.1.0 (git+https://github.com/sd2k/recipes?branch=embed-web)",
+ "recipe-db 0.1.0 (git+https://github.com/sd2k/recipes?rev=f5a3b693977daa71f2806ccc989386276b34b481)",
  "tokio",
 ]
 
@@ -3802,7 +3802,7 @@ dependencies = [
 [[package]]
 name = "recipe-server"
 version = "0.1.0"
-source = "git+https://github.com/sd2k/recipes?branch=embed-web#0c95cd73b03986e8ad42302927c6b499744543f7"
+source = "git+https://github.com/sd2k/recipes?rev=f5a3b693977daa71f2806ccc989386276b34b481#f5a3b693977daa71f2806ccc989386276b34b481"
 dependencies = [
  "async-graphql",
  "async-graphql-axum",
@@ -3810,11 +3810,11 @@ dependencies = [
  "dioxus",
  "mime_guess",
  "once_cell",
- "recipe-app 0.1.0 (git+https://github.com/sd2k/recipes?branch=embed-web)",
- "recipe-client 0.1.0 (git+https://github.com/sd2k/recipes?branch=embed-web)",
- "recipe-db 0.1.0 (git+https://github.com/sd2k/recipes?branch=embed-web)",
- "recipe-graphql 0.1.0 (git+https://github.com/sd2k/recipes?branch=embed-web)",
- "recipe-web 0.1.0 (git+https://github.com/sd2k/recipes?branch=embed-web)",
+ "recipe-app 0.1.0 (git+https://github.com/sd2k/recipes?rev=f5a3b693977daa71f2806ccc989386276b34b481)",
+ "recipe-client 0.1.0 (git+https://github.com/sd2k/recipes?rev=f5a3b693977daa71f2806ccc989386276b34b481)",
+ "recipe-db 0.1.0 (git+https://github.com/sd2k/recipes?rev=f5a3b693977daa71f2806ccc989386276b34b481)",
+ "recipe-graphql 0.1.0 (git+https://github.com/sd2k/recipes?rev=f5a3b693977daa71f2806ccc989386276b34b481)",
+ "recipe-web 0.1.0 (git+https://github.com/sd2k/recipes?rev=f5a3b693977daa71f2806ccc989386276b34b481)",
  "reqwest",
  "rust-embed",
  "serde_json",
@@ -3833,9 +3833,9 @@ version = "0.1.0"
 dependencies = [
  "async-trait",
  "axum",
- "recipe-db 0.1.0 (git+https://github.com/sd2k/recipes?branch=embed-web)",
- "recipe-graphql 0.1.0 (git+https://github.com/sd2k/recipes?branch=embed-web)",
- "recipe-server 0.1.0 (git+https://github.com/sd2k/recipes?branch=embed-web)",
+ "recipe-db 0.1.0 (git+https://github.com/sd2k/recipes?rev=f5a3b693977daa71f2806ccc989386276b34b481)",
+ "recipe-graphql 0.1.0 (git+https://github.com/sd2k/recipes?rev=f5a3b693977daa71f2806ccc989386276b34b481)",
+ "recipe-server 0.1.0 (git+https://github.com/sd2k/recipes?rev=f5a3b693977daa71f2806ccc989386276b34b481)",
  "shuttle-service",
  "sync_wrapper",
 ]
@@ -3859,14 +3859,14 @@ dependencies = [
 [[package]]
 name = "recipe-web"
 version = "0.1.0"
-source = "git+https://github.com/sd2k/recipes?branch=embed-web#0c95cd73b03986e8ad42302927c6b499744543f7"
+source = "git+https://github.com/sd2k/recipes?rev=f5a3b693977daa71f2806ccc989386276b34b481#f5a3b693977daa71f2806ccc989386276b34b481"
 dependencies = [
  "anyhow",
  "dioxus",
  "dioxus-logger",
  "getrandom 0.2.8",
  "log",
- "recipe-app 0.1.0 (git+https://github.com/sd2k/recipes?branch=embed-web)",
+ "recipe-app 0.1.0 (git+https://github.com/sd2k/recipes?rev=f5a3b693977daa71f2806ccc989386276b34b481)",
  "rust-embed",
  "tokio",
  "trunk",
