@@ -16,4 +16,6 @@ web-sys = "0.3.60"
 embed = ["rust-embed"]
 
 [build-dependencies]
+anyhow = { workspace = true }
 tokio = { workspace = true, features = ["full"] }
+trunk = { git = "https://github.com/sd2k/trunk", branch = "add-lib" }
