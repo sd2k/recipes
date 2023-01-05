@@ -5,10 +5,11 @@ use async_graphql_axum::{GraphQLRequest, GraphQLResponse};
 use axum::{
     body::{boxed, Full},
     extract::State,
+    headers::{self, Header},
     http::{header, StatusCode, Uri},
     response::{self, Html, IntoResponse, Response},
     routing::{get, get_service},
-    Router,
+    Router, TypedHeader,
 };
 use dioxus::prelude::*;
 #[cfg(not(feature = "embed"))]
@@ -85,16 +86,85 @@ async fn graphiql() -> impl IntoResponse {
     response::Html(GraphiQLSource::build().endpoint("/graphiql").finish())
 }
 
-async fn static_handler(uri: Uri, state: State<AppState>) -> Response {
+#[derive(Debug, Clone, Copy, Default)]
+struct AcceptEncoding {
+    gzip: bool,
+    brotli: bool,
+    deflate: bool,
+}
+
+impl Header for AcceptEncoding {
+    fn name() -> &'static headers::HeaderName {
+        &header::ACCEPT_ENCODING
+    }
+
+    fn decode<'i, I>(values: &mut I) -> Result<Self, headers::Error>
+    where
+        Self: Sized,
+        I: Iterator<Item = &'i header::HeaderValue>,
+    {
+        values
+            .next()
+            .map(|value| {
+                let mut gzip = false;
+                let mut brotli = false;
+                let mut deflate = false;
+                for part in value
+                    .to_str()
+                    .map_err(|_| headers::Error::invalid())?
+                    .split(',')
+                {
+                    match part.trim() {
+                        "gzip" => gzip = true,
+                        "br" => brotli = true,
+                        "deflate" => deflate = true,
+                        _ => {}
+                    }
+                }
+                Ok(AcceptEncoding {
+                    gzip,
+                    brotli,
+                    deflate,
+                })
+            })
+            .unwrap_or_else(|| Ok(AcceptEncoding::default()))
+    }
+
+    fn encode<E: Extend<header::HeaderValue>>(&self, values: &mut E) {
+        if self.gzip {
+            values.extend(Some(header::HeaderValue::from_static("gzip")));
+        }
+        if self.brotli {
+            values.extend(Some(header::HeaderValue::from_static("br")));
+        }
+        if self.deflate {
+            values.extend(Some(header::HeaderValue::from_static("deflate")));
+        }
+    }
+}
+
+async fn static_handler(
+    uri: Uri,
+    TypedHeader(accept_encoding): TypedHeader<AcceptEncoding>,
+    state: State<AppState>,
+) -> Response {
     let path = uri.path().trim_start_matches('/');
 
     if path.is_empty() {
         return index_html(state).await;
     }
 
-    match Assets::get(path) {
-        Some(content) => {
-            let body = boxed(Full::from(content.data));
+    let asset = if accept_encoding.brotli {
+        Assets::get(&format!("{}.br", path))
+            .or_else(|| Assets::get(path))
+            .map(|asset| asset.data)
+    } else {
+        Assets::get(path).map(|asset| asset.data)
+    };
+
+    match asset {
+        Some(data) => {
+            let body = boxed(Full::from(data));
             let mime = mime_guess::from_path(path).first_or_octet_stream();
 
             Response::builder()
