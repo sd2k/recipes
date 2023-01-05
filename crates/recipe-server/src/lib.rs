@@ -154,12 +154,18 @@ async fn static_handler(
         return index_html(state).await;
     }
 
-    let asset = if accept_encoding.brotli {
-        Assets::get(&format!("{}.br", path))
-            .or_else(|| Assets::get(path))
-            .map(|asset| asset.data)
+    let (asset, encoding) = if accept_encoding.brotli {
+        Assets::get(&format!("{}.br", path)).map_or_else(
+            || (Assets::get(path).map(|x| x.data), None),
+            |asset| {
+                (
+                    Some(asset.data),
+                    Some(header::HeaderValue::from_static("br")),
+                )
+            },
+        )
     } else {
-        Assets::get(path).map(|asset| asset.data)
+        (Assets::get(path).map(|asset| asset.data), None)
     };
 
     match asset {
@@ -167,10 +173,11 @@ async fn static_handler(
             let body = boxed(Full::from(data));
             let mime = mime_guess::from_path(path).first_or_octet_stream();
 
-            Response::builder()
-                .header(header::CONTENT_TYPE, mime.as_ref())
-                .body(body)
-                .unwrap()
+            let mut response = Response::builder().header(header::CONTENT_TYPE, mime.as_ref());
+            if let Some(encoding) = encoding {
+                response = response.header(header::CONTENT_ENCODING, encoding);
+            }
+            response.body(body).unwrap()
         }
         None => index_html(state).await,
     }
