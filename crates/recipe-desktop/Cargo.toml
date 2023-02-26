@@ -4,5 +4,6 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-dioxus = { workspace = true, features = ["desktop"] }
-recipe-app = { workspace = true }
+dioxus.workspace = true
+dioxus-desktop.workspace = true
+recipe-app.workspace = true

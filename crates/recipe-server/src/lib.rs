@@ -1,4 +1,4 @@
-use std::{future::ready, path::Path};
+use std::path::Path;
 
 use async_graphql::http::GraphiQLSource;
 use async_graphql_axum::{GraphQLRequest, GraphQLResponse};
@@ -6,9 +6,9 @@ use axum::{
     body::{boxed, Full},
     extract::State,
     headers::{self, Header},
-    http::{header, StatusCode, Uri},
+    http::{header, Uri},
     response::{self, Html, IntoResponse, Response},
-    routing::{get, get_service},
+    routing::get,
     Router, TypedHeader,
 };
 use dioxus::prelude::*;
@@ -184,12 +184,14 @@ async fn static_handler(
 }
 
 async fn index_html(state: State<AppState>) -> Response {
+    let AppState { api_url, .. } = state.0;
+
     // TODO: ideally we would just do a database call and construct the
     // types manually here rather than going through the API.
-    let req = AllRecipes::build(()).try_into().unwrap();
+    let req = AllRecipes::build(());
 
     let initial_state = reqwest::Client::new()
-        .post(state.api_url)
+        .post(api_url)
         .run_graphql(req)
         .await
         .unwrap()
@@ -198,12 +200,12 @@ async fn index_html(state: State<AppState>) -> Response {
     let mut app = VirtualDom::new_with_props(
         recipe_app::app,
         recipe_app::RootProps {
-            origin: state.api_url.clone(),
+            origin: api_url,
             initial_state,
         },
     );
     let _ = app.rebuild();
-    let html = dioxus::ssr::render_vdom_cfg(&app, |c| c.pre_render(true));
+    let html = dioxus_ssr::pre_render(&app);
     let Index { prefix, suffix } = get_index();
     Html(format!(r#"{prefix}<div id="main">{html}{suffix}"#)).into_response()
 }
@@ -219,10 +221,7 @@ pub fn create_servedir_router(path: &Path) -> Router<AppState> {
     Router::new()
         .route("/", get(index_html))
         .route("/graphql", get(graphiql).post(graphql_handler))
-        .nest_service(
-            "/assets",
-            get_service(ServeDir::new(&path)).handle_error(|_| ready(StatusCode::NOT_FOUND)),
-        )
+        .nest_service("/assets", ServeDir::new(path))
         .layer(ServiceBuilder::new().trace_for_http())
 }
 

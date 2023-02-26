@@ -5,8 +5,9 @@ edition = "2021"
 build = false
 
 [dependencies]
-dioxus = { workspace = true, features = ["web"] }
+dioxus.workspace = true
 dioxus-logger = "0.3.0"
+dioxus-web = { workspace = true, features = ["hydrate"] }
 getrandom = { version = "0.2.8", features = ["js"] }
 log = "0.4.17"
 recipe-app = { workspace = true }

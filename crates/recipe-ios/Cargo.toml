@@ -12,6 +12,7 @@ name = "recipe-ios-desktop"
 path = "gen/bin/desktop.rs"
 
 [dependencies]
-dioxus = { workspace = true, features = ["desktop"] }
+dioxus.workspace = true
+dioxus-desktop.workspace = true
 mobile-entry-point = "0.1.1"
 simple_logger = "4.0.0"

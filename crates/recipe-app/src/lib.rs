@@ -1,3 +1,4 @@
+#![allow(non_snake_case)]
 use std::{cell::RefCell, time::Duration};
 
 use dioxus::prelude::*;
@@ -40,8 +41,8 @@ fn Sidebar<'a>(cx: Scope<'a, SidebarProps<'a>>) -> Element<'a> {
 
 pub fn app(cx: Scope<RootProps>) -> Element {
     log::info!("Rendering app");
-    let recipes = use_state(&cx, || cx.props.initial_state.replace(None));
-    let recipes_fetch = use_coroutine(&cx, |mut rx: UnboundedReceiver<()>| {
+    let recipes = use_state(cx, || cx.props.initial_state.replace(None));
+    let recipes_fetch = use_coroutine(cx, |mut rx: UnboundedReceiver<()>| {
         let mut url = reqwest::Url::parse(cx.props.origin).unwrap();
         url.set_path("/graphql");
         let mut interval = fluvio_wasm_timer::Interval::new(Duration::from_secs(5)).fuse();

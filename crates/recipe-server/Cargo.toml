@@ -7,7 +7,8 @@ edition = "2021"
 async-graphql = { workspace = true }
 async-graphql-axum = { workspace = true }
 axum = { workspace = true }
-dioxus = { workspace = true, features = ["ssr"] }
+dioxus.workspace = true
+dioxus-ssr.workspace = true
 mime_guess = "2.0.4"
 once_cell = "1.17.0"
 recipe-app = { workspace = true }
@@ -20,7 +21,7 @@ rust-embed = { version = "6.4.2", features = ["interpolate-folder-path"] }
 serde_json = "1.0.91"
 tokio = { workspace = true, features = ["macros", "rt-multi-thread", "signal"] }
 tower = { workspace = true }
-tower-http = { workspace = true, features = ["fs", "trace"]}
+tower-http = { workspace = true, features = ["fs", "trace", "util"]}
 tracing.workspace = true
 tracing-error = { workspace = true, features = ["traced-error"] }
 tracing-logfmt = "0.3.0"

@@ -13,7 +13,10 @@ bigdecimal = "0.3.0"
 chrono = "0.4.23"
 diesel = "2.0.2"
 diesel-async = "0.2.0"
-dioxus = "0.2.4"
+dioxus = "0.3.2"
+dioxus-desktop = "0.3.0"
+dioxus-ssr = "0.3.0"
+dioxus-web = "0.3.1"
 futures-util = "0.3.25"
 recipe-app = { path = "crates/recipe-app" }
 recipe-client = { path = "crates/recipe-client" }
@@ -24,12 +27,12 @@ recipe-ios = { path = "crates/recipe-ios" }
 recipe-server = { path = "crates/recipe-server" }
 recipe-shuttle = { path = "crates/recipe-shuttle" }
 recipe-web = { path = "crates/recipe-web" }
-reqwest = "0.11.13"
+reqwest = { version = "0.11.13", default-features = false }
 serde = "1.0.152"
 thiserror = "1.0.38"
 tokio = "1.22.0"
 tower = "0.4.13"
-tower-http = "0.3.5"
+tower-http = "0.4.0"
 tracing = "0.1.37"
 tracing-error = "0.2.0"
 tracing-subscriber = "0.3.16"

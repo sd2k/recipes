@@ -1,6 +1,6 @@
 [app]
 name = "recipe-ios"
-stylized-name = "Recipe Ios"
+stylized-name = "Recipes"
 domain = "bsull.io"
 template-pack = "winit"
 

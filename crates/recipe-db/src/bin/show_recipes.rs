@@ -3,8 +3,6 @@ use diesel::prelude::*;
 
 use recipe_db::*;
 
-use crate::prelude::*;
-
 pub fn create_measurement(
     connection: &mut PgConnection,
     measurement: models::NewMeasurement<'_>,
@@ -47,7 +45,7 @@ pub fn create_recipe(
         let recipe_ingredients = ingredients
             .into_iter()
             .map(|mut ingredient| {
-                ingredient.recipe_id = recipe.id.into();
+                ingredient.recipe_id = recipe.id;
                 diesel::insert_into(schema::recipe_ingredients::table)
                     .values(ingredient)
                     .get_result::<models::RecipeIngredient>(conn)
@@ -165,7 +163,7 @@ fn main() -> Result<()> {
     println!(
         "Displaying {} recipe{}\n",
         results.len(),
-        (results.len() != 1).then_some("s").unwrap_or("")
+        if results.len() != 1 { "s" } else { "" }
     );
     for recipe in results {
         println!("# {}", recipe.name);
@@ -183,9 +181,11 @@ fn main() -> Result<()> {
                     recipe_ingredient.quantity,
                     measurement.abbreviation.as_deref().unwrap_or(""),
                     ingredient.name,
-                    (measurement.name == "count" && recipe_ingredient.quantity > 1.into())
-                        .then_some("s")
-                        .unwrap_or("")
+                    if measurement.name == "count" && recipe_ingredient.quantity > 1.into() {
+                        "s"
+                    } else {
+                        ""
+                    }
                 );
                 Ok(())
             })
@@ -196,6 +196,5 @@ fn main() -> Result<()> {
         }
     }
 
-    let results = models::Recipe::by_ids(&[1.into(), 2.into()]);
     Ok(())
 }
