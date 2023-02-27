@@ -48,31 +48,32 @@ pub fn app(cx: Scope<RootProps>) -> Element {
         let mut interval = fluvio_wasm_timer::Interval::new(Duration::from_secs(5)).fuse();
         let recipes = recipes.clone();
         async move {
-            let new = reqwest::Client::new()
+            if let Ok(new) = reqwest::Client::new()
                 .post(url.clone())
                 .run_graphql(AllRecipes::build(()))
                 .await
-                .unwrap()
-                .data;
-            recipes.modify(|_| new);
-            loop {
-                select! {
-                    _ = rx.next() => {
-                        if let Ok(Some(new)) = reqwest::Client::new()
-                            .post(url.clone())
-                            .run_graphql(AllRecipes::build(()))
-                            .await.map(|x| x.data)
-                        {
-                            recipes.modify(|_| Some(new));
-                        }
-                    },
-                    _ = interval.next() => {
-                        if let Ok(Some(new)) = reqwest::Client::new()
-                            .post(url.clone())
-                            .run_graphql(AllRecipes::build(()))
-                            .await.map(|x| x.data)
-                        {
-                            recipes.modify(|_| Some(new));
+                .map(|x| x.data)
+            {
+                recipes.modify(|_| new);
+                loop {
+                    select! {
+                        _ = rx.next() => {
+                            if let Ok(Some(new)) = reqwest::Client::new()
+                                .post(url.clone())
+                                .run_graphql(AllRecipes::build(()))
+                                .await.map(|x| x.data)
+                            {
+                                recipes.modify(|_| Some(new));
+                            }
+                        },
+                        _ = interval.next() => {
+                            if let Ok(Some(new)) = reqwest::Client::new()
+                                .post(url.clone())
+                                .run_graphql(AllRecipes::build(()))
+                                .await.map(|x| x.data)
+                            {
+                                recipes.modify(|_| Some(new));
+                            }
                         }
                     }
                 }
