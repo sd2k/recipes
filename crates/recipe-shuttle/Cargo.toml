@@ -11,8 +11,8 @@ axum = "0.6.1"
 # recipe-graphql = { workspace = true }
 # recipe-server = { workspace = true }
 # Shuttle doesn't work with path dependencies so we need to push all these to git before deploying.
-recipe-db = { git = "https://github.com/sd2k/recipes", rev = "2f034e805ecb24c6de4049c2e70cbf0afaf29f83" }
-recipe-graphql = { git = "https://github.com/sd2k/recipes", rev = "2f034e805ecb24c6de4049c2e70cbf0afaf29f83" }
-recipe-server = { git = "https://github.com/sd2k/recipes", rev = "2f034e805ecb24c6de4049c2e70cbf0afaf29f83", features = ["embed"] }
+recipe-db = { git = "https://github.com/sd2k/recipes", rev = "ebd7faef783bcc32d159fd021f40aac1016ab294" }
+recipe-graphql = { git = "https://github.com/sd2k/recipes", rev = "ebd7faef783bcc32d159fd021f40aac1016ab294" }
+recipe-server = { git = "https://github.com/sd2k/recipes", rev = "ebd7faef783bcc32d159fd021f40aac1016ab294", features = ["embed"] }
 shuttle-service = { version = "0.8.0", features = ["web-axum"] }
 sync_wrapper = "0.1.1"
