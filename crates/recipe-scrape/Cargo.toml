@@ -1,0 +1,8 @@
+[package]
+name = "recipe-scrape"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+reqwest.workspace = true
+url.workspace = true

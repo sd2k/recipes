@@ -74,3 +74,11 @@ CREATE TABLE meal_plans (
   start_date DATE NOT NULL,
   end_date DATE NOT NULL
 );
+
+CREATE TABLE meal_plan_recipes (
+  id BIGSERIAL PRIMARY KEY,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  meal_plan_id BIGINT NOT NULL REFERENCES meal_plans(id),
+  recipe_id BIGINT NOT NULL REFERENCES recipes(id),
+  CONSTRAINT meal_plan_recipes_unique UNIQUE (meal_plan_id, recipe_id)
+);

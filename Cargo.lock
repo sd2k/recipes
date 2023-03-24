@@ -3486,6 +3486,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "recipe-scrape"
+version = "0.1.0"
+dependencies = [
+ "reqwest",
+ "url",
+]
+
+[[package]]
 name = "recipe-server"
 version = "0.1.0"
 dependencies = [
