@@ -1,8 +1,22 @@
 [package]
 name = "recipe-scrape"
-version = "0.1.0"
-edition = "2021"
+repository.workspace = true
+version.workspace = true
+edition.workspace = true
 
 [dependencies]
-reqwest.workspace = true
+inventory = "0.3.4"
+iso8601-duration = { version = "0.2.0", features = ["serde"] }
+once_cell = "1.17.1"
+recipe-db.workspace = true
+regex = "1.7.3"
+reqwest = { workspace = true, features = ["rustls-tls"] }
+serde = { workspace = true, features = ["derive"] }
+serde_json.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
 url.workspace = true
+webpage = { version = "1.5.0", default-features = false }
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["macros"] }
