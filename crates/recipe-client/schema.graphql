@@ -23,6 +23,7 @@ type QueryRoot {
 	recipes: [Recipe!]!
 	ingredients: [Ingredient!]!
 	measurements: [Measurement!]!
+	scrapeRecipe(url: String!): ScrapedRecipe!
 }
 
 type Recipe {
@@ -42,6 +43,14 @@ type RecipeIngredient {
 	ingredient: Ingredient
 	quantity: Float
 	measurement: Measurement
+}
+
+type ScrapedRecipe {
+	name: String!
+	source: String
+	notes: String
+	prepTimeMinutes: Int
+	cookingTimeMinutes: Int
 }
 
 

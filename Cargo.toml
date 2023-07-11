@@ -30,6 +30,7 @@ recipe-db = { path = "crates/recipe-db" }
 recipe-desktop = { path = "crates/recipe-desktop" }
 recipe-graphql = { path = "crates/recipe-graphql" }
 recipe-ios = { path = "crates/recipe-ios" }
+recipe-scrape = { path = "crates/recipe-scrape" }
 recipe-server = { path = "crates/recipe-server" }
 recipe-shuttle = { path = "crates/recipe-shuttle" }
 recipe-web = { path = "crates/recipe-web" }

@@ -8,4 +8,5 @@ async-graphql = { workspace = true, features = ["dataloader"] }
 bigdecimal = { workspace = true }
 futures-util = { workspace = true }
 recipe-db = { workspace = true }
+recipe-scrape = { workspace = true }
 tokio = { workspace = true }
