@@ -1,13 +1,16 @@
 mod ingredient;
 mod scrapers;
 
-use std::{io, time::Duration};
+use std::io;
+#[cfg(not(target_arch = "wasm32"))]
+use std::time::Duration;
 
 use reqwest::Url;
 
 pub use ingredient::ScrapedIngredient;
 use scrapers::SCRAPERS;
 
+#[cfg(not(target_arch = "wasm32"))]
 const RECIPE_USER_AGENT: &str = concat!(
     env!("CARGO_PKG_NAME"),
     "/",
@@ -50,6 +53,7 @@ pub struct RecipeScraper {
 
 impl RecipeScraper {
     pub fn new() -> Self {
+        #[allow(unused_mut)]
         let mut client = reqwest::Client::builder();
         #[cfg(not(target_arch = "wasm32"))]
         {
