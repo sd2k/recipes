@@ -2399,12 +2399,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ae52f28f45ac2bc96edb7714de995cffc174a395fb0abf5bff453587c980d7b9"
 
 [[package]]
-name = "inventory"
-version = "0.3.8"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c38a87a1e0e2752433cd4b26019a469112a25fb43b30f5ee9b3b898925c5a0f9"
-
-[[package]]
 name = "io-lifetimes"
 version = "1.0.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3680,6 +3674,7 @@ dependencies = [
  "futures-util",
  "log",
  "recipe-client",
+ "recipe-scrape",
  "reqwest",
 ]
 
@@ -3723,6 +3718,7 @@ dependencies = [
  "bigdecimal",
  "futures-util",
  "recipe-db",
+ "recipe-scrape",
  "tokio",
 ]
 
@@ -3740,10 +3736,9 @@ dependencies = [
 name = "recipe-scrape"
 version = "0.1.0"
 dependencies = [
- "inventory",
+ "chrono",
  "iso8601-duration",
  "once_cell",
- "recipe-db",
  "regex",
  "reqwest",
  "serde",

@@ -1,8 +1,10 @@
-use iso8601_duration::Duration;
+use std::collections::HashMap;
+
 use once_cell::sync::Lazy;
-use regex::Regex;
 use reqwest::Url;
-use serde::{Deserialize, Serialize};
+use serde::de::Error;
+
+mod bbc_good_food;
 
 use crate::{ingredient, ScrapedRecipe};
 
@@ -19,80 +21,25 @@ pub trait Scraper: Sync + Send {
     fn scrape(&self, url: Url, value: serde_json::Value) -> Result<ScrapedRecipe, ScrapeError>;
 }
 
-pub struct BBCGoodFoodScraper;
+pub struct DummyScraper;
 
-#[derive(Debug, Clone, Deserialize, Serialize)]
-#[serde(untagged)]
-enum Yield {
-    String(String),
-    Number(u32),
-}
-
-static YIELD_REGEX: Lazy<Regex> =
-    Lazy::new(|| Regex::new(r#"(one|two|three|four|five|six|seven|eight|nine|ten|\d+)"#).unwrap());
-
-impl Yield {
-    fn as_u32(&self) -> Option<u32> {
-        match self {
-            Self::String(s) => YIELD_REGEX.find(s).and_then(|x| {
-                let substr = x.as_str();
-                match substr.parse::<u32>() {
-                    Ok(n) => Some(n),
-                    Err(_) => match substr {
-                        "one" => Some(1),
-                        "two" => Some(2),
-                        "three" => Some(3),
-                        "four" => Some(4),
-                        "five" => Some(5),
-                        "six" => Some(6),
-                        "seven" => Some(7),
-                        "eight" => Some(8),
-                        "nine" => Some(9),
-                        "ten" => Some(10),
-                        _ => None,
-                    },
-                }
-            }),
-            Self::Number(n) => Some(*n),
-        }
-    }
-}
-
-#[derive(Debug, Clone, Deserialize, Serialize)]
-#[serde(rename_all = "camelCase")]
-pub struct BBCGoodFoodRecipe {
-    name: String,
-    description: String,
-    cook_time: Duration,
-    prep_time: Duration,
-    recipe_yield: Yield,
-    #[serde(alias = "recipeIngredient")]
-    ingredients: Vec<String>,
-}
-
-impl Scraper for BBCGoodFoodScraper {
+impl Scraper for DummyScraper {
     fn host(&self) -> &'static str {
-        "www.bbcgoodfood.com"
+        "dummy"
     }
 
-    fn scrape(&self, url: Url, value: serde_json::Value) -> Result<ScrapedRecipe, ScrapeError> {
-        let recipe: BBCGoodFoodRecipe = serde_json::from_value(value)?;
-        Ok(ScrapedRecipe {
-            name: recipe.name,
-            description: Some(recipe.description),
-            source: url,
-            notes: None,
-            prep_time_minutes: recipe.prep_time.num_minutes().map(|x| x.ceil() as u32),
-            cooking_time_minutes: recipe.cook_time.num_minutes().map(|x| x.ceil() as u32),
-            servings: recipe.recipe_yield.as_u32(),
-            ingredients: recipe
-                .ingredients
-                .into_iter()
-                .map(|x| x.parse())
-                .collect::<Result<Vec<_>, _>>()?,
-        })
+    fn scrape(&self, _url: Url, _value: serde_json::Value) -> Result<ScrapedRecipe, ScrapeError> {
+        Err(ScrapeError::Json(serde_json::Error::custom(
+            "dummy scraper",
+        )))
     }
 }
 
-inventory::collect!(&'static dyn Scraper);
-inventory::submit!(&BBCGoodFoodScraper as &'static dyn Scraper);
+pub static SCRAPERS: Lazy<HashMap<&'static str, &'static dyn Scraper>> = Lazy::new(|| {
+    [
+        &bbc_good_food::BBCGoodFoodScraper as &dyn Scraper,
+        &DummyScraper,
+    ]
+    .map(|s| (s.host(), s))
+    .into()
+});

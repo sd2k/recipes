@@ -5,7 +5,8 @@ use std::{io, time::Duration};
 
 use reqwest::Url;
 
-use ingredient::ScrapedIngredient;
+pub use ingredient::ScrapedIngredient;
+use scrapers::SCRAPERS;
 
 const RECIPE_USER_AGENT: &str = concat!(
     env!("CARGO_PKG_NAME"),
@@ -30,7 +31,7 @@ pub enum Error {
     Scrape(#[from] scrapers::ScrapeError),
 }
 
-#[derive(Debug)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct ScrapedRecipe {
     pub name: String,
     pub source: Url,
@@ -42,16 +43,22 @@ pub struct ScrapedRecipe {
     pub ingredients: Vec<ScrapedIngredient>,
 }
 
+#[derive(Clone, Debug)]
 pub struct RecipeScraper {
     client: reqwest::Client,
 }
 
 impl RecipeScraper {
     pub fn new() -> Self {
-        Self::with_client(
-            reqwest::Client::builder()
+        let mut client = reqwest::Client::builder();
+        #[cfg(not(target_arch = "wasm32"))]
+        {
+            client = client
                 .user_agent(RECIPE_USER_AGENT)
-                .timeout(Duration::from_secs(10))
+                .timeout(Duration::from_secs(10));
+        }
+        Self::with_client(
+            client
                 .build()
                 .expect("failed to build reqwest client; check host TLS config"),
         )
@@ -62,6 +69,10 @@ impl RecipeScraper {
     }
 
     pub async fn scrape(&self, url: Url) -> Result<ScrapedRecipe, Error> {
+        let host = url.host_str().expect("fetched URL to have valid host");
+        let scraper = SCRAPERS
+            .get(host)
+            .ok_or(Error::UnrecognisedHost(host.to_string()))?;
         let response = self
             .client
             .get(url.clone())
@@ -75,13 +86,7 @@ impl RecipeScraper {
             .into_iter()
             .find(|schema| schema.schema_type.as_str() == "Recipe")
             .ok_or(Error::NotARecipe)
-            .and_then(|schema| {
-                let host = url.host_str().expect("fetched URL to have valid host");
-                let scraper = inventory::iter::<&'static dyn scrapers::Scraper>()
-                    .find(|scraper| scraper.host() == host)
-                    .ok_or(Error::UnrecognisedHost(host.to_string()))?;
-                Ok(scraper.scrape(url, schema.value)?)
-            })
+            .and_then(|schema| Ok(scraper.scrape(url, schema.value)?))
     }
 }
 
