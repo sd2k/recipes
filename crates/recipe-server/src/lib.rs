@@ -83,7 +83,7 @@ async fn graphql_handler(state: State<AppState>, req: GraphQLRequest) -> GraphQL
 }
 
 async fn graphiql() -> impl IntoResponse {
-    response::Html(GraphiQLSource::build().endpoint("/graphiql").finish())
+    response::Html(GraphiQLSource::build().endpoint("/graphql").finish())
 }
 
 #[derive(Debug, Clone, Copy, Default)]
