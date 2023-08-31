@@ -12,6 +12,6 @@ fn main() {
             origin: origin.as_str(),
             initial_state: None.into(),
         },
-        Config::new(),
+        Config::new().hydrate(true),
     );
 }

@@ -10,5 +10,5 @@ chrono = { workspace = true }
 derive_more = "0.99.17"
 diesel = { workspace = true, features = ["chrono", "numeric", "postgres"] }
 diesel-async = { workspace = true, features = ["deadpool", "postgres"] }
-diesel-derive-newtype = "2.0.0-rc.0"
+diesel-derive-newtype = "2.0.0"
 dotenvy = "0.15.6"

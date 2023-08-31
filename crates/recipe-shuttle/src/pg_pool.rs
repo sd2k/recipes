@@ -1,31 +1,68 @@
 use async_trait::async_trait;
-use shuttle_service::{
-    database::{AwsRdsEngine, Type},
-    error::CustomError,
-    Factory, ResourceBuilder,
+use serde::Serialize;
+use shuttle_common::{
+    database::{self, AwsRdsEngine},
+    resource, DbInput, DbOutput,
 };
+use shuttle_runtime::{Error, Factory, ResourceBuilder};
 
 use recipe_db::{build_pool, DbPool};
 
-pub struct ShuttleDbPool;
+#[derive(Serialize)]
+pub struct ShuttleDbPool {
+    config: DbInput,
+}
 
 #[async_trait]
 impl ResourceBuilder<DbPool> for ShuttleDbPool {
     fn new() -> Self {
-        Self
+        Self {
+            config: Default::default(),
+        }
     }
 
-    async fn build(
-        self,
-        factory: &mut dyn Factory,
-        _runtime: &shuttle_service::Runtime,
-    ) -> Result<DbPool, shuttle_service::Error> {
-        let connection_string = factory
-            .get_db_connection_string(Type::AwsRds(AwsRdsEngine::Postgres))
-            .await?;
+    const TYPE: resource::Type =
+        resource::Type::Database(database::Type::AwsRds(database::AwsRdsEngine::Postgres));
+
+    type Config = DbInput;
+
+    type Output = DbOutput;
+
+    fn config(&self) -> &Self::Config {
+        &self.config
+    }
+
+    async fn output(self, factory: &mut dyn Factory) -> Result<Self::Output, Error> {
+        let info = match factory.get_environment() {
+            shuttle_service::Environment::Production => DbOutput::Info(
+                factory
+                    .get_db_connection(database::Type::AwsRds(AwsRdsEngine::Postgres))
+                    .await?,
+            ),
+            shuttle_service::Environment::Local => {
+                if let Some(local_uri) = self.config.local_uri {
+                    DbOutput::Local(local_uri)
+                } else {
+                    DbOutput::Info(
+                        factory
+                            .get_db_connection(database::Type::AwsRds(AwsRdsEngine::Postgres))
+                            .await?,
+                    )
+                }
+            }
+        };
+
+        Ok(info)
+    }
+
+    async fn build(build_data: &Self::Output) -> Result<DbPool, Error> {
+        let connection_string = match build_data {
+            DbOutput::Local(local_uri) => local_uri.clone(),
+            DbOutput::Info(info) => info.connection_string_private(),
+        };
         Ok(build_pool(&connection_string)
             .max_size(5)
             .build()
-            .map_err(CustomError::new)?)
+            .map_err(|e| Error::Database(e.to_string()))?)
     }
 }

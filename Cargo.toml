@@ -2,6 +2,12 @@
 members = [
   "crates/*"
 ]
+resolver = "2"
+
+[workspace.package]
+version = "0.1.0"
+repository = "https://github.com/sd2k/recipes"
+edition = "2021"
 
 [workspace.dependencies]
 anyhow = "1.0.68"
@@ -9,10 +15,10 @@ async-graphql = "5.0.4"
 async-graphql-axum = "5.0.4"
 async-trait = "0.1.51"
 axum = "0.6.1"
-bigdecimal = "0.3.0"
+bigdecimal = "0.4.1"
 chrono = "0.4.23"
 diesel = "2.0.2"
-diesel-async = "0.2.0"
+diesel-async = "0.3.1"
 dioxus = "0.3.2"
 dioxus-desktop = "0.3.0"
 dioxus-ssr = "0.3.0"
@@ -24,11 +30,13 @@ recipe-db = { path = "crates/recipe-db" }
 recipe-desktop = { path = "crates/recipe-desktop" }
 recipe-graphql = { path = "crates/recipe-graphql" }
 recipe-ios = { path = "crates/recipe-ios" }
+recipe-scrape = { path = "crates/recipe-scrape" }
 recipe-server = { path = "crates/recipe-server" }
 recipe-shuttle = { path = "crates/recipe-shuttle" }
 recipe-web = { path = "crates/recipe-web" }
 reqwest = { version = "0.11.13", default-features = false }
 serde = "1.0.152"
+serde_json = "1.0.94"
 thiserror = "1.0.38"
 tokio = "1.22.0"
 tower = "0.4.13"
@@ -36,9 +44,17 @@ tower-http = "0.4.0"
 tracing = "0.1.37"
 tracing-error = "0.2.0"
 tracing-subscriber = "0.3.16"
+url = "2.3.1"
 
 [profile.dev.package.insta]
 opt-level = 3
 
 [profile.dev.package.similar]
 opt-level = 3
+
+[profile.release-web]
+inherits = "release"
+lto = true
+opt-level = 'z'
+strip = true
+codegen-units = 1

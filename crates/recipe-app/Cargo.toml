@@ -9,4 +9,5 @@ fluvio-wasm-timer = "0.2.5"
 futures-util.workspace = true
 log = "0.4.17"
 recipe-client = { workspace = true }
+recipe-scrape = { workspace = true }
 reqwest = { workspace = true, default-features = false }

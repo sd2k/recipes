@@ -29,7 +29,7 @@ backend = "http://localhost:8000/graphql"
 
 [web.watcher]
 
-watch_path = ["src", "../recipe-app", "../recipe-client", "../recipe-db"]
+watch_path = ["src", "../recipe-app"]
 
 # include `assets` in web platform
 [web.resource]

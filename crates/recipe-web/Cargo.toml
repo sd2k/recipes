@@ -6,7 +6,7 @@ build = false
 
 [dependencies]
 dioxus.workspace = true
-dioxus-logger = "0.3.0"
+dioxus-logger = "0.4.1"
 dioxus-web = { workspace = true, features = ["hydrate"] }
 getrandom = { version = "0.2.8", features = ["js"] }
 log = "0.4.17"
@@ -18,7 +18,7 @@ web-sys = "0.3.60"
 embed = ["rust-embed"]
 
 # Commented out because building/compiling to WASM doesn't currently work inside shuttle.
-# [build-dependencies]
-# anyhow = { workspace = true }
-# tokio = { workspace = true, features = ["full"] }
-# trunk = { git = "https://github.com/sd2k/trunk", branch = "add-lib" }
+[build-dependencies]
+anyhow = { workspace = true }
+tokio = { workspace = true, features = ["full"] }
+trunk = { git = "https://github.com/sd2k/trunk", branch = "add-lib" }

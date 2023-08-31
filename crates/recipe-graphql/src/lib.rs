@@ -11,6 +11,7 @@ use recipe_db::{
     traits::All,
     DbPool,
 };
+use recipe_scrape::RecipeScraper;
 
 mod types;
 
@@ -27,6 +28,10 @@ impl QueryRoot {
         ctx.data_unchecked::<DataLoader<T>>()
             .load_one(I::from(i64::try_from(id)?))
             .await
+    }
+
+    fn scraper<'a>(&self, ctx: &'a Context<'_>) -> &'a RecipeScraper {
+        ctx.data_unchecked()
     }
 }
 
@@ -67,6 +72,10 @@ impl QueryRoot {
             .try_collect()
             .await?)
     }
+
+    async fn scrape_recipe(&self, ctx: &Context<'_>, url: String) -> Result<types::ScrapedRecipe> {
+        Ok(self.scraper(ctx).scrape(url.parse()?).await?.into())
+    }
 }
 
 pub type Schema = async_graphql::Schema<QueryRoot, EmptyMutation, EmptySubscription>;
@@ -78,6 +87,7 @@ pub fn build_schema() -> SchemaBuilder<QueryRoot, EmptyMutation, EmptySubscripti
 pub fn create_schema(pool: recipe_db::DbPool) -> Schema {
     build_schema()
         .data(pool.clone())
+        .data(RecipeScraper::new())
         .data(DataLoader::new(
             RecipeLoader::new(pool.clone()),
             tokio::spawn,
