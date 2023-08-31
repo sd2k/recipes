@@ -202,7 +202,7 @@ impl Canonicalize for SpoonUnit {
 
 static INGREDIENT_REGEX: Lazy<Regex> = Lazy::new(|| {
     Regex::new(
-        r#"^(?P<amount>[0-9¼½¾⅓⅔⅛⅜⅝⅞⅙⅚⅕⅖⅗⅘./]*)?\s*(x\s*)?(?P<unit>ml|millilitre|l|litre|tsp|teaspoon|tbsp|cup|kg|g|gram|oz|ounce|pinch of|pinch|handful of|handful|(small|large) pack)?\s?(?P<rest>(?P<ingredient>[^,\n]*)((,\s*)(?P<instructions>.*))?)$"#,
+        r"^(?P<amount>[0-9¼½¾⅓⅔⅛⅜⅝⅞⅙⅚⅕⅖⅗⅘./]*)?\s*(x\s*)?((?P<unit>ml|millilitre|l|litre|tsp|teaspoon|tbsp|cup|kg|g|gram|oz|ounce|pinch of|pinch|handful of|handful|(small|large) pack) )?\s?(?P<rest>(?P<ingredient>[^,\n]*)((,\s*)(?P<instructions>.*))?)$",
     ).unwrap()
 });
 
@@ -343,6 +343,16 @@ mod tests {
                     amount: Some(400.0),
                     unit: Some(Unit::Mass(MassUnit::Grams)),
                     instructions: None,
+                },
+            ),
+            (
+                "4 garlic cloves, sliced",
+                ScrapedIngredient {
+                    raw: "4 garlic cloves, sliced".to_string(),
+                    name: Some("garlic cloves".to_string()),
+                    amount: Some(4.0),
+                    unit: None,
+                    instructions: Some("sliced".to_string()),
                 },
             ),
             (
