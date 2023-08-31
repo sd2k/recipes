@@ -448,17 +448,6 @@ checksum = "8c3c1a368f70d6cf7302d78f8f7093da241fb8e8807c05cc9e51a125895a6d5b"
 
 [[package]]
 name = "bigdecimal"
-version = "0.3.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a6773ddc0eafc0e509fb60e48dff7f450f8e674a0686ae8605e8d9901bd5eefa"
-dependencies = [
- "num-bigint",
- "num-integer",
- "num-traits",
-]
-
-[[package]]
-name = "bigdecimal"
 version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "454bca3db10617b88b566f205ed190aedb0e0e6dd4cad61d3988a72e8c5594cb"
@@ -1231,7 +1220,7 @@ version = "2.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d98235fdc2f355d330a8244184ab6b4b33c28679c0b4158f63138e51d6cf7e88"
 dependencies = [
- "bigdecimal 0.4.1",
+ "bigdecimal",
  "bitflags 2.4.0",
  "byteorder",
  "chrono",
@@ -4355,7 +4344,7 @@ name = "recipe-db"
 version = "0.1.0"
 dependencies = [
  "anyhow",
- "bigdecimal 0.3.1",
+ "bigdecimal",
  "chrono",
  "derive_more",
  "diesel",
@@ -4378,7 +4367,7 @@ name = "recipe-graphql"
 version = "0.1.0"
 dependencies = [
  "async-graphql",
- "bigdecimal 0.3.1",
+ "bigdecimal",
  "futures-util",
  "recipe-db",
  "recipe-scrape",
