@@ -4418,6 +4418,7 @@ dependencies = [
  "axum",
  "dioxus",
  "dioxus-ssr",
+ "dioxus-web",
  "mime_guess",
  "once_cell",
  "recipe-app",

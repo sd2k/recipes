@@ -28,9 +28,9 @@ use recipe_web::Assets;
 #[prefix = "assets/"]
 struct Assets;
 
-struct Index {
-    prefix: String,
-    suffix: String,
+pub struct Index {
+    pub prefix: String,
+    pub suffix: String,
 }
 
 #[cfg(not(debug_assertions))]
@@ -44,11 +44,11 @@ static INDEX: once_cell::sync::Lazy<Index> = once_cell::sync::Lazy::new(|| {
     }
 });
 #[cfg(not(debug_assertions))]
-fn get_index() -> &'static Index {
+pub fn get_index() -> &'static Index {
     &*INDEX
 }
 #[cfg(debug_assertions)]
-fn get_index() -> Index {
+pub fn get_index() -> Index {
     let index_bytes = Assets::get("assets/index.html").unwrap().data;
     let index = String::from_utf8(index_bytes.into_owned()).unwrap();
     let (prefix, suffix) = index.split_once(r#"<div id="main">"#).unwrap();
