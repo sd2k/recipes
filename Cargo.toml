@@ -11,8 +11,8 @@ edition = "2021"
 
 [workspace.dependencies]
 anyhow = "1.0.68"
-async-graphql = "5.0.4"
-async-graphql-axum = "5.0.4"
+async-graphql = "6.0.4"
+async-graphql-axum = "6.0.4"
 async-trait = "0.1.51"
 axum = "0.6.1"
 bigdecimal = "0.4.1"
