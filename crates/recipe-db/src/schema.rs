@@ -11,6 +11,15 @@ diesel::table! {
 }
 
 diesel::table! {
+    meal_plan_recipes (id) {
+        id -> Int8,
+        created_at -> Timestamp,
+        meal_plan_id -> Int8,
+        recipe_id -> Int8,
+    }
+}
+
+diesel::table! {
     meal_plans (id) {
         id -> Int8,
         name -> Text,
@@ -67,6 +76,8 @@ diesel::table! {
 }
 
 diesel::joinable!(ingredients -> measurements (default_measurement_id));
+diesel::joinable!(meal_plan_recipes -> meal_plans (meal_plan_id));
+diesel::joinable!(meal_plan_recipes -> recipes (recipe_id));
 diesel::joinable!(recipe_ingredients -> ingredients (ingredient_id));
 diesel::joinable!(recipe_ingredients -> measurements (measurement_id));
 diesel::joinable!(recipe_ingredients -> recipes (recipe_id));
@@ -74,6 +85,7 @@ diesel::joinable!(recipe_steps -> recipes (recipe_id));
 
 diesel::allow_tables_to_appear_in_same_query!(
     ingredients,
+    meal_plan_recipes,
     meal_plans,
     measurements,
     recipe_ingredients,
