@@ -18,7 +18,7 @@ recipe-db = { workspace = true }
 recipe-graphql = { workspace = true }
 recipe-web = { workspace = true }
 reqwest = { workspace = true, default-features = false }
-rust-embed = { version = "6.4.2", features = ["interpolate-folder-path"] }
+rust-embed = { version = "8.0.0", features = ["interpolate-folder-path"] }
 serde_json.workspace = true
 tokio = { workspace = true, features = ["macros", "rt-multi-thread", "signal"] }
 tower = { workspace = true }

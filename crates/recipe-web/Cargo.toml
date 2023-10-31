@@ -11,7 +11,7 @@ dioxus-web = { workspace = true, features = ["hydrate"] }
 getrandom = { version = "0.2.8", features = ["js"] }
 log = "0.4.17"
 recipe-app = { workspace = true }
-rust-embed = { version = "6.4.2", features = ["interpolate-folder-path"], optional = true }
+rust-embed = { version = "8.0.0", features = ["interpolate-folder-path"], optional = true }
 web-sys = "0.3.60"
 
 [features]
