@@ -14,6 +14,6 @@ serde = { workspace = true, features = ["derive"] }
 shuttle-axum = "0.25.0"
 shuttle-common = "0.25.0"
 shuttle-metadata = "0.25.0"
-shuttle-runtime = "0.25.0"
+shuttle-runtime = "0.30.1"
 shuttle-service = "0.25.0"
 tokio.workspace = true
