@@ -217,7 +217,7 @@ impl FromStr for ScrapedIngredient {
                 amount: None,
                 unit: None,
                 instructions: None,
-            }))
+            }));
         };
         Ok(ScrapedIngredient {
             raw: s.to_string(),
