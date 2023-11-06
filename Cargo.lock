@@ -4340,7 +4340,7 @@ dependencies = [
  "recipe-server",
  "serde",
  "shuttle-axum",
- "shuttle-common",
+ "shuttle-common 0.31.0",
  "shuttle-metadata",
  "shuttle-runtime",
  "shuttle-service",
@@ -4991,6 +4991,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "shuttle-common"
+version = "0.31.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "03089b45ff42d977b5c3df0ee8cf6cb147f8df65bc4c8068405a129e06380e46"
+dependencies = [
+ "anyhow",
+ "chrono",
+ "semver",
+ "serde",
+ "serde_json",
+ "strum 0.24.1",
+ "zeroize",
+]
+
+[[package]]
 name = "shuttle-metadata"
 version = "0.25.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -5013,7 +5028,7 @@ dependencies = [
  "prost",
  "prost-types",
  "serde_json",
- "shuttle-common",
+ "shuttle-common 0.25.0",
  "tokio",
  "tonic",
  "tower",
@@ -5033,7 +5048,7 @@ dependencies = [
  "serde",
  "serde_json",
  "shuttle-codegen",
- "shuttle-common",
+ "shuttle-common 0.25.0",
  "shuttle-proto",
  "shuttle-service",
  "strfmt",
@@ -5055,7 +5070,7 @@ dependencies = [
  "anyhow",
  "async-trait",
  "serde",
- "shuttle-common",
+ "shuttle-common 0.25.0",
  "strfmt",
  "thiserror",
 ]
@@ -6852,6 +6867,12 @@ checksum = "56c1936c4cc7a1c9ab21a1ebb602eb942ba868cbd44a99cb7cdc5892335e1c85"
 dependencies = [
  "linked-hash-map",
 ]
+
+[[package]]
+name = "zeroize"
+version = "1.6.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2a0956f1ba7c7909bfb66c2e9e4124ab6f6482560f6628b5aaeba39207c9aad9"
 
 [[package]]
 name = "zip"
