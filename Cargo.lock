@@ -4340,7 +4340,7 @@ dependencies = [
  "recipe-server",
  "serde",
  "shuttle-axum",
- "shuttle-common",
+ "shuttle-common 0.33.0",
  "shuttle-metadata",
  "shuttle-runtime",
  "shuttle-service",
@@ -4991,6 +4991,22 @@ dependencies = [
 ]
 
 [[package]]
+name = "shuttle-common"
+version = "0.33.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a49871b17a6b3bf3ea1d6502dd4d01449f41a1226b126f435aef79d806af8332"
+dependencies = [
+ "anyhow",
+ "chrono",
+ "semver",
+ "serde",
+ "serde_json",
+ "strum 0.25.0",
+ "url",
+ "zeroize",
+]
+
+[[package]]
 name = "shuttle-metadata"
 version = "0.25.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -5013,7 +5029,7 @@ dependencies = [
  "prost",
  "prost-types",
  "serde_json",
- "shuttle-common",
+ "shuttle-common 0.25.0",
  "tokio",
  "tonic",
  "tower",
@@ -5033,7 +5049,7 @@ dependencies = [
  "serde",
  "serde_json",
  "shuttle-codegen",
- "shuttle-common",
+ "shuttle-common 0.25.0",
  "shuttle-proto",
  "shuttle-service",
  "strfmt",
@@ -5055,7 +5071,7 @@ dependencies = [
  "anyhow",
  "async-trait",
  "serde",
- "shuttle-common",
+ "shuttle-common 0.25.0",
  "strfmt",
  "thiserror",
 ]
@@ -6146,6 +6162,7 @@ dependencies = [
  "form_urlencoded",
  "idna 0.4.0",
  "percent-encoding",
+ "serde",
 ]
 
 [[package]]
@@ -6852,6 +6869,12 @@ checksum = "56c1936c4cc7a1c9ab21a1ebb602eb942ba868cbd44a99cb7cdc5892335e1c85"
 dependencies = [
  "linked-hash-map",
 ]
+
+[[package]]
+name = "zeroize"
+version = "1.7.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "525b4ec142c6b68a2d10f01f7bbf6755599ca3f81ea53b8431b7dd348f5fdb2d"
 
 [[package]]
 name = "zip"
