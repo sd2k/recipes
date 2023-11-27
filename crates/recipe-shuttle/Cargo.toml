@@ -12,7 +12,7 @@ recipe-graphql.workspace = true
 recipe-server = { workspace = true, features = [] }
 serde = { workspace = true, features = ["derive"] }
 shuttle-axum = "0.25.0"
-shuttle-common = "0.25.0"
+shuttle-common = "0.34.0"
 shuttle-metadata = "0.25.0"
 shuttle-runtime = "0.25.0"
 shuttle-service = "0.25.0"
