@@ -16,7 +16,6 @@ recipe-app = { workspace = true }
 recipe-client = { workspace = true }
 recipe-db = { workspace = true }
 recipe-graphql = { workspace = true }
-recipe-web = { workspace = true }
 reqwest = { workspace = true, default-features = false }
 rust-embed = { version = "6.4.2", features = ["interpolate-folder-path"] }
 serde_json.workspace = true
@@ -27,6 +26,3 @@ tracing.workspace = true
 tracing-error = { workspace = true, features = ["traced-error"] }
 tracing-logfmt = "0.3.0"
 tracing-subscriber = { workspace = true, features = ["env-filter"] }
-
-[features]
-embed = ["recipe-web/embed"]

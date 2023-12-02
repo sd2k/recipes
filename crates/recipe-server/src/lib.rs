@@ -12,17 +12,13 @@ use axum::{
     Router, TypedHeader,
 };
 use dioxus::prelude::*;
-#[cfg(not(feature = "embed"))]
 use rust_embed::RustEmbed;
 use tower::ServiceBuilder;
 use tower_http::{services::ServeDir, ServiceBuilderExt};
 
 use recipe_client::prelude::*;
 use recipe_graphql::Schema;
-#[cfg(feature = "embed")]
-use recipe_web::Assets;
 
-#[cfg(not(feature = "embed"))]
 #[derive(Debug, RustEmbed)]
 #[folder = "$CARGO_MANIFEST_DIR/../recipe-web/dist"]
 #[prefix = "assets/"]
