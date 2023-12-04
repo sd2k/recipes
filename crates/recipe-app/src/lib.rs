@@ -1,38 +1,27 @@
 #![allow(non_snake_case)]
-use std::{cell::RefCell, time::Duration};
 
 use dioxus::prelude::*;
+use dioxus_fullstack::prelude::*;
 
-use futures_util::{select, StreamExt};
-use recipe_client::prelude::*;
 use recipe_scrape::RecipeScraper;
 
-#[derive(Props, PartialEq)]
-pub struct RootProps {
-    pub origin: &'static str,
-    pub initial_state: RefCell<Option<AllRecipes>>,
-}
+use crate::server_functions::recipes;
 
-impl Default for RootProps {
-    fn default() -> Self {
-        Self {
-            origin: "http://localhost:8000",
-            initial_state: None.into(),
-        }
-    }
-}
+pub mod server_functions;
 
 #[derive(Props, PartialEq)]
-struct SidebarProps<'a> {
-    recipes: &'a [Recipe],
-    meal_plans: &'a [()],
+struct SidebarProps {
+    meal_plans: Vec<()>,
 }
 
-fn Sidebar<'a>(cx: Scope<'a, SidebarProps<'a>>) -> Element<'a> {
+fn Sidebar(cx: Scope<SidebarProps>) -> Element {
+    let recipes = use_server_future(cx, (), |()| async move { recipes().await.unwrap() })?;
+    log::info!("recipes: {:?}", recipes.value());
+
     cx.render(rsx!(
         h1 { "Recipes" }
         ul {
-            cx.props.recipes.iter().map(|recipe| {
+            recipes.value().iter().map(|recipe| {
                 rsx!(li { "{recipe.name}" })
             })
         }
@@ -41,12 +30,12 @@ fn Sidebar<'a>(cx: Scope<'a, SidebarProps<'a>>) -> Element<'a> {
 }
 
 #[derive(Props, PartialEq)]
-struct ScrapedIngredientProps<'a> {
-    ingredient: &'a recipe_scrape::ScrapedIngredient,
+struct ScrapedIngredientProps {
+    ingredient: recipe_scrape::ScrapedIngredient,
 }
 
-fn ScrapedIngredient<'a>(cx: Scope<'a, ScrapedIngredientProps<'a>>) -> Element<'a> {
-    let ingredient = cx.props.ingredient;
+fn ScrapedIngredient(cx: Scope<ScrapedIngredientProps>) -> Element {
+    let ingredient = &cx.props.ingredient;
     let name = ingredient.name.as_deref().unwrap_or("unknown ingredient!");
     cx.render(rsx!(
         li {
@@ -58,28 +47,19 @@ fn ScrapedIngredient<'a>(cx: Scope<'a, ScrapedIngredientProps<'a>>) -> Element<'
 }
 
 #[derive(Props, PartialEq)]
-struct ScrapedRecipeProps<'a> {
-    recipe: &'a recipe_scrape::ScrapedRecipe,
+struct ScrapedRecipeProps {
+    recipe: recipe_scrape::ScrapedRecipe,
 }
 
-fn ScrapedRecipe<'a>(cx: Scope<'a, ScrapedRecipeProps<'a>>) -> Element<'a> {
-    // let client = use_context(cx);
-    // let add_recipe = move |_| {
-    //     let recipe = cx.props.recipe;
-    //     cx.
-    // };
+fn ScrapedRecipe(cx: Scope<ScrapedRecipeProps>) -> Element {
     cx.render(rsx!(
         h1 { "{cx.props.recipe.name}" }
         h2 { "Ingredients" }
         ul {
             cx.props.recipe.ingredients.iter().map(|ingredient| {
-                rsx!(ScrapedIngredient { ingredient: ingredient })
+                rsx!(ScrapedIngredient { ingredient: ingredient.clone() })
             })
         }
-        // input {
-        //     r#type: "submit",
-        //     onclick: add_recipe,
-        // }
     ))
 }
 
@@ -116,80 +96,19 @@ fn Scraper(cx: Scope) -> Element {
             onclick: scrape_recipe,
             "Scrape"
         }
-        recipe.as_ref().map(|x| rsx!(ScrapedRecipe { recipe: x }))
+        recipe.as_ref().map(|x| rsx!(ScrapedRecipe { recipe: x.clone() }))
     ))
 }
 
-pub struct Client {
-    client: reqwest::Client,
-    url: reqwest::Url,
-}
-
-impl Client {
-    pub fn new(origin: &'static str) -> Self {
-        let mut url = reqwest::Url::parse(origin).expect("origin should be a valid URL");
-        url.set_path("/graphql");
-        Self {
-            client: reqwest::Client::new(),
-            url,
-        }
-    }
-}
-
-pub fn app(cx: Scope<RootProps>) -> Element {
-    use_shared_state_provider(cx, || Client::new(cx.props.origin));
+pub fn app(cx: Scope) -> Element {
     log::info!("Rendering app");
-    let recipes = use_state(cx, || cx.props.initial_state.replace(None));
-    let recipes_fetch = use_coroutine(cx, |mut rx: UnboundedReceiver<()>| {
-        let mut url = reqwest::Url::parse(cx.props.origin).unwrap();
-        url.set_path("/graphql");
-        let mut interval = fluvio_wasm_timer::Interval::new(Duration::from_secs(5)).fuse();
-        let recipes = recipes.clone();
-        async move {
-            if let Ok(new) = reqwest::Client::new()
-                .post(url.clone())
-                .run_graphql(AllRecipes::build(()))
-                .await
-                .map(|x| x.data)
-            {
-                recipes.modify(|_| new);
-                loop {
-                    select! {
-                        _ = rx.next() => {
-                            if let Ok(Some(new)) = reqwest::Client::new()
-                                .post(url.clone())
-                                .run_graphql(AllRecipes::build(()))
-                                .await.map(|x| x.data)
-                            {
-                                recipes.modify(|_| Some(new));
-                            }
-                        },
-                        _ = interval.next() => {
-                            if let Ok(Some(new)) = reqwest::Client::new()
-                                .post(url.clone())
-                                .run_graphql(AllRecipes::build(()))
-                                .await.map(|x| x.data)
-                            {
-                                recipes.modify(|_| Some(new));
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    });
-
-    let recipes = recipes
-        .as_ref()
-        .map(|r| r.recipes.as_slice())
-        .unwrap_or_default();
     cx.render(rsx!(
         h1 { "Recipe planner" }
         div {
-            div {
-                button { onclick: |_| recipes_fetch.send(()), "Refresh" }
-            }
-            Sidebar { meal_plans: &[], recipes: recipes },
+            // div {
+            //     button { onclick: |_| recipes_fetch.send(()), "Refresh" }
+            // }
+            Sidebar { meal_plans: vec![] },
         }
         Scraper {}
     ))

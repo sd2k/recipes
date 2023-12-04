@@ -2,13 +2,9 @@
 name = "recipe-web"
 version = "0.1.0"
 edition = "2021"
-build = false
+resolver = "2"
 
 [dependencies]
-dioxus.workspace = true
-dioxus-logger = "0.4.1"
-dioxus-web = { workspace = true, features = ["hydrate"] }
-getrandom = { version = "0.2.8", features = ["js"] }
-log = "0.4.17"
-recipe-app = { workspace = true }
-web-sys = "0.3.60"
+dioxus-fullstack = { version = "0.4.1", features = ["web"] }
+recipe-app.workspace = true
+tracing-wasm = { version = "0.2.0" }

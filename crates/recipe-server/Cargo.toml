@@ -4,25 +4,17 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-async-graphql = { workspace = true }
-async-graphql-axum = { workspace = true }
 axum = { workspace = true }
 dioxus.workspace = true
+dioxus-fullstack = { version = "0.4.1", features = ["axum"] }
 dioxus-ssr.workspace = true
 dioxus-web.workspace = true
-mime_guess = "2.0.4"
-once_cell = "1.17.0"
 recipe-app = { workspace = true }
-recipe-client = { workspace = true }
 recipe-db = { workspace = true }
-recipe-graphql = { workspace = true }
-reqwest = { workspace = true, default-features = false }
-rust-embed = { version = "6.4.2", features = ["interpolate-folder-path"] }
 serde_json.workspace = true
 tokio = { workspace = true, features = ["macros", "rt-multi-thread", "signal"] }
 tower = { workspace = true }
-tower-http = { workspace = true, features = ["fs", "trace", "util"]}
+tower-http = { workspace = true, features = ["compression-gzip", "trace"]}
 tracing.workspace = true
 tracing-error = { workspace = true, features = ["traced-error"] }
-tracing-logfmt = "0.3.0"
 tracing-subscriber = { workspace = true, features = ["env-filter"] }
