@@ -19,7 +19,7 @@ pub fn setup_tracing() {
 #[tokio::main]
 async fn main() {
     setup_tracing();
-    let addr = std::net::SocketAddr::from(([0, 0, 0, 0], 8080));
+    let addr = std::net::SocketAddr::from(([127, 0, 0, 1], 8080));
     axum::Server::bind(&addr)
         .serve(recipe_server::router().into_make_service())
         .await
