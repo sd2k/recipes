@@ -1,6 +1,10 @@
 #!/usr/bin/env just --justfile
 
-export RUST_LOG := "tower-http=debug,dioxus=debug,recipe=debug,info"
+export RUST_LOG := "tower_http=debug,dioxus=debug,recipe=debug,info"
+
+alias d := run-desktop
+alias s := run-server
+alias w := build-web
 
 default:
   @just --list
