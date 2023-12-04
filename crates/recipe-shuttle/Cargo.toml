@@ -6,5 +6,5 @@ publish.workspace = true
 
 [dependencies]
 recipe-server.workspace = true
-shuttle-axum = "0.34.0"
-shuttle-runtime = "0.34.0"
+shuttle-axum = "0.34.1"
+shuttle-runtime = "0.34.1"

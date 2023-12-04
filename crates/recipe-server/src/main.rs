@@ -12,15 +12,17 @@ pub fn setup_tracing() {
     let error_layer = ErrorLayer::default();
 
     tracing_subscriber::registry()
+        .with(tracing_subscriber::fmt::layer())
         .with(filter_layer)
         .with(error_layer)
         .init();
 }
 
-fn main() {
+#[tokio::main]
+async fn main() {
     setup_tracing();
-
-    let assets_path = concat!(env!("CARGO_MANIFEST_DIR"), "/../recipe-web/dist");
-    let cfg = ServeConfigBuilder::new(app, ()).assets_path(assets_path);
-    LaunchBuilder::new(app).server_cfg(cfg).launch()
+    let addr = std::net::SocketAddr::from(([0, 0, 0, 0], 8080));
+    axum::Server::bind(&addr)
+        .serve(recipe_server::router().into_make_service())
+        .await;
 }

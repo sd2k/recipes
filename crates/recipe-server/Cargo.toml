@@ -9,7 +9,7 @@ dioxus.workspace = true
 dioxus-fullstack = { version = "0.4.1", features = ["axum"] }
 dioxus-ssr.workspace = true
 dioxus-web.workspace = true
-recipe-app = { workspace = true }
+recipe-app = { workspace = true, features = ["ssr"] }
 recipe-db = { workspace = true }
 serde_json.workspace = true
 tokio = { workspace = true, features = ["macros", "rt-multi-thread", "signal"] }

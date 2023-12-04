@@ -6,6 +6,8 @@ use tower_http::{compression::CompressionLayer, trace::TraceLayer};
 use recipe_app::app;
 
 pub fn router() -> Router {
+    recipe_app::server_functions::register_explicit();
+
     let assets_path = concat!(env!("CARGO_MANIFEST_DIR"), "/../recipe-web/dist");
     let cfg = ServeConfigBuilder::new(app, ())
         .assets_path(assets_path)

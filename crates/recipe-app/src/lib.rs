@@ -3,9 +3,7 @@
 use dioxus::prelude::*;
 use dioxus_fullstack::prelude::*;
 
-use recipe_scrape::RecipeScraper;
-
-use crate::server_functions::recipes;
+use crate::server_functions::{recipes, scrape_recipe};
 
 pub mod server_functions;
 
@@ -64,22 +62,17 @@ fn ScrapedRecipe(cx: Scope<ScrapedRecipeProps>) -> Element {
 }
 
 fn Scraper(cx: Scope) -> Element {
-    let scraper = use_state(cx, RecipeScraper::new);
     let url = use_state(cx, || "".to_string());
-    let recipe = use_state(cx, || None);
+    let recipe = use_state::<Option<recipe_scrape::ScrapedRecipe>>(cx, || None);
     let scrape_recipe = move |_| {
-        let scraper = scraper.to_owned();
+        let url = url.to_owned();
         let recipe = recipe.to_owned();
         cx.spawn({
-            let url = url.get().parse();
             async move {
-                match url {
-                    Ok(u) => match scraper.scrape(u).await {
-                        Ok(r) => recipe.set(Some(r)),
-                        Err(err) => log::error!("Failed to scrape recipe: {:?}", err),
-                    },
-                    Err(err) => log::error!("Invalid URL: {:?}", err),
-                };
+                match scrape_recipe(url.to_string()).await {
+                    Ok(r) => recipe.set(Some(r)),
+                    Err(err) => log::error!("Failed to scrape recipe: {:?}", err),
+                }
             }
         });
     };
@@ -91,8 +84,8 @@ fn Scraper(cx: Scope) -> Element {
             value: "{url}",
             oninput: move |evt| url.set(evt.value.clone()),
         },
-        input {
-            r#type: "submit",
+        button {
+            "type": "submit",
             onclick: scrape_recipe,
             "Scrape"
         }
@@ -108,7 +101,7 @@ pub fn app(cx: Scope) -> Element {
             // div {
             //     button { onclick: |_| recipes_fetch.send(()), "Refresh" }
             // }
-            Sidebar { meal_plans: vec![] },
+            Sidebar { meal_plans: vec![] }
         }
         Scraper {}
     ))

@@ -7,15 +7,24 @@ edition.workspace = true
 [dependencies]
 chrono.workspace = true
 iso8601-duration = { version = "0.2.0", features = ["serde"] }
-once_cell = "1.17.1"
-regex = "1.7.3"
-reqwest = { workspace = true, features = ["rustls-tls"] }
+once_cell = { version = "1.17.1", optional = true }
+regex = { version = "1.7.3", optional = true }
+reqwest = { workspace = true, optional = true, features = ["rustls-tls"] }
 serde = { workspace = true, features = ["derive"] }
 serde_json.workspace = true
 thiserror.workspace = true
-tokio.workspace = true
-url.workspace = true
-webpage = { version = "1.5.0", default-features = false }
+tokio = { workspace = true, optional = true, features = ["macros", "rt-multi-thread"] }
+url = { workspace = true, features = ["serde"] }
+webpage = { version = "1.5.0", default-features = false, optional = true }
 
 [dev-dependencies]
 tokio = { workspace = true, features = ["macros", "rt-multi-thread"] }
+
+[features]
+default = []
+scraper = ["webpage", "regex", "reqwest", "once_cell"]
+
+[[bin]]
+name = "recipe-scrape"
+path = "src/main.rs"
+required-features = ["scraper", "tokio"]
