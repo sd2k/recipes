@@ -5,7 +5,7 @@ use reqwest::Url;
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    scrapers::{ScrapeError, Scraper},
+    scraper::{Error, Scraper},
     ScrapedRecipe,
 };
 
@@ -65,7 +65,7 @@ impl Scraper for BBCGoodFoodScraper {
         "www.bbcgoodfood.com"
     }
 
-    fn scrape(&self, url: Url, value: serde_json::Value) -> Result<ScrapedRecipe, ScrapeError> {
+    fn scrape(&self, url: Url, value: serde_json::Value) -> Result<ScrapedRecipe, Error> {
         let recipe: BBCGoodFoodRecipe = serde_json::from_value(value)?;
         Ok(ScrapedRecipe {
             name: recipe.name,

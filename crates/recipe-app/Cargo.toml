@@ -4,10 +4,16 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+anyhow = { workspace = true }
+chrono = { workspace = true }
 dioxus = { workspace = true }
-fluvio-wasm-timer = "0.2.5"
-futures-util.workspace = true
+dioxus-fullstack = { version = "0.4.1" }
 log = "0.4.17"
-recipe-client = { workspace = true }
-recipe-scrape = { workspace = true }
-reqwest = { workspace = true, default-features = false }
+recipe-repository = { workspace = true, optional = true }
+recipe-scrape.workspace = true
+recipe-shared.workspace = true
+serde = { workspace = true }
+
+[features]
+default = []
+ssr = ["recipe-repository", "recipe-scrape/scraper"]

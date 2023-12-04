@@ -38,7 +38,10 @@ pub fn create_pool() -> anyhow::Result<DbPool> {
 }
 
 pub mod prelude {
+    pub use diesel::result::Error as DieselError;
     pub use diesel_async::RunQueryDsl;
 
     pub use super::traits::*;
+    pub use super::DbPool;
+    pub type PoolError = diesel_async::pooled_connection::deadpool::PoolError;
 }

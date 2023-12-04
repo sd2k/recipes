@@ -6,4 +6,7 @@ edition = "2021"
 [dependencies]
 dioxus.workspace = true
 dioxus-desktop.workspace = true
+dioxus-fullstack = { version = "0.4.1", features = ["desktop"] }
+dioxus-logger = { version = "0.4.0" }
+log = "0.4.0"
 recipe-app.workspace = true

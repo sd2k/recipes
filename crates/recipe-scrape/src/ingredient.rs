@@ -5,8 +5,7 @@
 
 use std::str::FromStr;
 
-use once_cell::sync::Lazy;
-use regex::Regex;
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
@@ -22,7 +21,7 @@ pub enum Error {
     AmountAndUnit(String),
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ScrapedIngredient {
     pub raw: String,
     pub name: Option<String>,
@@ -46,7 +45,7 @@ trait Canonicalize {
     fn canonicalize(&self) -> f64;
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub enum Unit {
     Mass(MassUnit),
     Volume(VolumeUnit),
@@ -92,7 +91,7 @@ impl FromStr for Unit {
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum MassUnit {
     Grams,
     Kilograms,
@@ -128,7 +127,7 @@ impl Canonicalize for MassUnit {
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum VolumeUnit {
     Millilitres,
     Litres,
@@ -173,7 +172,7 @@ impl FromStr for VolumeUnit {
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum SpoonUnit {
     Teaspoons,
     Tablespoons,
@@ -200,12 +199,14 @@ impl Canonicalize for SpoonUnit {
     }
 }
 
-static INGREDIENT_REGEX: Lazy<Regex> = Lazy::new(|| {
-    Regex::new(
+#[cfg(feature = "scraper")]
+static INGREDIENT_REGEX: once_cell::sync::Lazy<regex::Regex> = once_cell::sync::Lazy::new(|| {
+    regex::Regex::new(
         r"^(?P<amount>[0-9¼½¾⅓⅔⅛⅜⅝⅞⅙⅚⅕⅖⅗⅘./]*)?\s*(x\s*)?((?P<unit>ml|millilitre|l|litre|tsp|teaspoon|tbsp|cup|kg|g|gram|oz|ounce|pinch of|pinch|handful of|handful|(small|large) pack) )?\s?(?P<rest>(?P<ingredient>[^,\n]*)((,\s*)(?P<instructions>.*))?)$",
     ).unwrap()
 });
 
+#[cfg(feature = "scraper")]
 impl FromStr for ScrapedIngredient {
     type Err = Error;
 
@@ -217,7 +218,7 @@ impl FromStr for ScrapedIngredient {
                 amount: None,
                 unit: None,
                 instructions: None,
-            }))
+            }));
         };
         Ok(ScrapedIngredient {
             raw: s.to_string(),
@@ -241,14 +242,17 @@ impl FromStr for ScrapedIngredient {
     }
 }
 
+#[cfg(feature = "scraper")]
 struct Amount(f64);
 
+#[cfg(feature = "scraper")]
 impl Amount {
     fn as_f64(&self) -> f64 {
         self.0
     }
 }
 
+#[cfg(feature = "scraper")]
 impl FromStr for Amount {
     type Err = Error;
 

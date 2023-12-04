@@ -2,23 +2,9 @@
 name = "recipe-web"
 version = "0.1.0"
 edition = "2021"
-build = false
+resolver = "2"
 
 [dependencies]
-dioxus.workspace = true
-dioxus-logger = "0.4.1"
-dioxus-web = { workspace = true, features = ["hydrate"] }
-getrandom = { version = "0.2.8", features = ["js"] }
-log = "0.4.17"
-recipe-app = { workspace = true }
-rust-embed = { version = "6.4.2", features = ["interpolate-folder-path"], optional = true }
-web-sys = "0.3.60"
-
-[features]
-embed = ["rust-embed"]
-
-# Commented out because building/compiling to WASM doesn't currently work inside shuttle.
-[build-dependencies]
-anyhow = { workspace = true }
-tokio = { workspace = true, features = ["full"] }
-trunk = { git = "https://github.com/sd2k/trunk", branch = "add-lib" }
+dioxus-fullstack = { version = "0.4.1", features = ["web"] }
+recipe-app.workspace = true
+tracing-wasm = { version = "0.2.0" }

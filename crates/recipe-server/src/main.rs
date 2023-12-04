@@ -1,12 +1,9 @@
-use std::net::SocketAddr;
-
-use axum::Server;
+use dioxus_fullstack::prelude::*;
+use recipe_app::app;
 use tracing_error::ErrorLayer;
 use tracing_subscriber::{prelude::*, EnvFilter};
 
-use recipe_db::create_pool;
-use recipe_graphql::create_schema;
-use recipe_server::create_router_with_state;
+// use recipe_db::create_pool;
 
 pub fn setup_tracing() {
     let filter_layer = EnvFilter::try_from_default_env()
@@ -15,45 +12,17 @@ pub fn setup_tracing() {
     let error_layer = ErrorLayer::default();
 
     tracing_subscriber::registry()
+        .with(tracing_subscriber::fmt::layer())
         .with(filter_layer)
         .with(error_layer)
-        .with(tracing_logfmt::layer())
         .init();
-}
-
-async fn shutdown_signal() {
-    let ctrl_c = async {
-        tokio::signal::ctrl_c()
-            .await
-            .expect("failed to install Ctrl+C handler");
-    };
-
-    let terminate = async {
-        tokio::signal::unix::signal(tokio::signal::unix::SignalKind::terminate())
-            .expect("failed to install signal handler")
-            .recv()
-            .await;
-    };
-
-    tokio::select! {
-        _ = ctrl_c => {},
-        _ = terminate => {},
-    }
-
-    tracing::warn!("signal received, starting graceful shutdown");
 }
 
 #[tokio::main]
 async fn main() {
     setup_tracing();
-
-    let pool = create_pool().expect("could not create database pool");
-    let schema = create_schema(pool.clone());
-    let app = create_router_with_state(schema);
-
-    Server::bind(&"0.0.0.0:8000".parse().unwrap())
-        .serve(app.into_make_service_with_connect_info::<SocketAddr>())
-        .with_graceful_shutdown(shutdown_signal())
-        .await
-        .unwrap();
+    let addr = std::net::SocketAddr::from(([0, 0, 0, 0], 8080));
+    axum::Server::bind(&addr)
+        .serve(recipe_server::router().into_make_service())
+        .await;
 }

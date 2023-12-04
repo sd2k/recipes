@@ -1,19 +1,10 @@
 [package]
 name = "recipe-shuttle"
-version = "0.1.0"
-edition = "2021"
-publish = false
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
 
 [dependencies]
-async-trait = "0.1.60"
-axum = "0.6.1"
-recipe-db.workspace = true
-recipe-graphql.workspace = true
-recipe-server = { workspace = true, features = [] }
-serde = { workspace = true, features = ["derive"] }
-shuttle-axum = "0.25.0"
-shuttle-common = "0.25.0"
-shuttle-metadata = "0.25.0"
-shuttle-runtime = "0.25.0"
-shuttle-service = "0.25.0"
-tokio.workspace = true
+recipe-server.workspace = true
+shuttle-axum = "0.34.1"
+shuttle-runtime = "0.34.1"
