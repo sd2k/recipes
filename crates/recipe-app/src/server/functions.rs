@@ -1,21 +1,22 @@
 use dioxus_fullstack::prelude::*;
+use tracing::debug;
 
+#[cfg(feature = "ssr")]
+use recipe_repository::Repository;
 use recipe_scrape::ScrapedRecipe;
 use recipe_shared::Recipe;
 
+#[cfg(feature = "ssr")]
+use super::AppState;
+
 #[server(Recipes)]
 pub async fn recipes() -> Result<Vec<Recipe>, ServerFnError> {
-    // let recipe_repo: Vec<Recipe> = extract();
-    Ok(vec![Recipe {
-        id: 1,
-        created_at: chrono::Utc::now().naive_utc(),
-        name: "something".to_string(),
-        slug: "something".to_string(),
-        source: None,
-        notes: None,
-        prep_time_minutes: None,
-        cooking_time_minutes: Some(10),
-    }])
+    debug!("loading state from server context");
+    let state: AppState = server_context()
+        .get::<AppState>()
+        .ok_or_else(|| ServerFnError::ServerError("missing state".to_string()))?;
+    debug!("loading recipes from DB");
+    Ok(state.repo.list().await?)
 }
 
 #[server(ScrapeRecipe)]

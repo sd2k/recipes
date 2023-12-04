@@ -21,8 +21,17 @@ pub trait Repository<T> {
     async fn list(&self) -> Result<Vec<T>>;
 }
 
+#[derive(Clone)]
 pub struct DieselRepository {
     pool: DbPool,
+}
+
+impl std::fmt::Debug for DieselRepository {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("DieselRepository")
+            .field("pool", &"<pool>")
+            .finish()
+    }
 }
 
 impl DieselRepository {

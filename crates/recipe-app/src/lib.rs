@@ -3,9 +3,9 @@
 use dioxus::prelude::*;
 use dioxus_fullstack::prelude::*;
 
-use crate::server_functions::{recipes, scrape_recipe};
+use crate::server::{recipes, scrape_recipe};
 
-pub mod server_functions;
+pub mod server;
 
 #[derive(Props, PartialEq)]
 struct SidebarProps {

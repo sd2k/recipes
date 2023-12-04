@@ -53,8 +53,8 @@ strip = true
 codegen-units = 1
 
 [patch.crates-io]
-dioxus = { git = "https://github.com/DioxusLabs/dioxus" }
-dioxus-desktop = { git = "https://github.com/DioxusLabs/dioxus" }
-dioxus-fullstack = { git = "https://github.com/DioxusLabs/dioxus" }
-dioxus-ssr = { git = "https://github.com/DioxusLabs/dioxus" }
-dioxus-web = { git = "https://github.com/DioxusLabs/dioxus" }
+dioxus = { git = "https://github.com/sd2k/dioxus" }
+dioxus-desktop = { git = "https://github.com/sd2k/dioxus" }
+dioxus-fullstack = { git = "https://github.com/sd2k/dioxus" }
+dioxus-ssr = { git = "https://github.com/sd2k/dioxus" }
+dioxus-web = { git = "https://github.com/sd2k/dioxus" }

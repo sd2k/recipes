@@ -18,3 +18,8 @@ build-web:
 run-server: build-web
   cd crates/recipe-server && cargo run
 
+run-shuttle: build-web
+  cd crates/recipe-shuttle && cargo shuttle run
+
+doc:
+  cargo doc --open
