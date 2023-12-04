@@ -15,7 +15,7 @@ serde_json.workspace = true
 thiserror.workspace = true
 tokio = { workspace = true, optional = true, features = ["macros", "rt-multi-thread"] }
 url = { workspace = true, features = ["serde"] }
-webpage = { version = "1.5.0", default-features = false, optional = true }
+webpage = { version = "2.0.0", default-features = false, optional = true }
 
 [dev-dependencies]
 tokio = { workspace = true, features = ["macros", "rt-multi-thread"] }
