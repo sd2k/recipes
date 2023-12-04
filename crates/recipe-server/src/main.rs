@@ -1,5 +1,3 @@
-use dioxus_fullstack::prelude::*;
-use recipe_app::app;
 use tracing_error::ErrorLayer;
 use tracing_subscriber::{prelude::*, EnvFilter};
 
@@ -24,5 +22,6 @@ async fn main() {
     let addr = std::net::SocketAddr::from(([0, 0, 0, 0], 8080));
     axum::Server::bind(&addr)
         .serve(recipe_server::router().into_make_service())
-        .await;
+        .await
+        .unwrap()
 }
