@@ -49,7 +49,11 @@ pub fn router(state: AppState) -> Router {
                 }
             }
         })
-        .fallback(get(render_handler_with_state).with_state((state.clone(), cfg, ssr_state)))
+        .fallback(get(render_handler_with_context).with_state((
+            move |cfg| cfg.insert(state.clone()).unwrap(),
+            cfg,
+            ssr_state,
+        )))
         .layer(
             ServiceBuilder::new()
                 .layer(CompressionLayer::new().gzip(true))
