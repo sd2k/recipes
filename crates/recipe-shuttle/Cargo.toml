@@ -10,4 +10,4 @@ recipe-db = { workspace = true }
 recipe-repository = { workspace = true }
 recipe-server.workspace = true
 shuttle-axum = "0.34.1"
-shuttle-runtime = "0.34.1"
+shuttle-runtime = "0.35.1"
