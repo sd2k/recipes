@@ -22,6 +22,7 @@ impl From<DbRecipe> for Recipe {
             notes: db_recipe.notes,
             prep_time_minutes: db_recipe.prep_time_minutes,
             cooking_time_minutes: db_recipe.cooking_time_minutes,
+            image_url: db_recipe.image_url,
         })
     }
 }

@@ -11,4 +11,5 @@ pub struct Recipe {
     pub notes: Option<String>,
     pub prep_time_minutes: Option<i32>,
     pub cooking_time_minutes: Option<i32>,
+    pub image_url: Option<String>,
 }

@@ -50,6 +50,12 @@ impl Yield {
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
+struct Image {
+    url: String,
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct BBCGoodFoodRecipe {
     name: String,
     description: String,
@@ -58,6 +64,7 @@ pub struct BBCGoodFoodRecipe {
     recipe_yield: Yield,
     #[serde(alias = "recipeIngredient")]
     ingredients: Vec<String>,
+    image: Option<Image>,
 }
 
 impl Scraper for BBCGoodFoodScraper {
@@ -80,6 +87,7 @@ impl Scraper for BBCGoodFoodScraper {
                 .into_iter()
                 .map(|x| x.parse())
                 .collect::<Result<Vec<_>, _>>()?,
+            image_url: recipe.image.map(|x| x.url),
         })
     }
 }
