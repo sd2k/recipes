@@ -1,5 +1,4 @@
 use dioxus_fullstack::prelude::*;
-use tracing::debug;
 
 #[cfg(feature = "ssr")]
 use recipe_repository::Repository;
@@ -11,11 +10,11 @@ use super::AppState;
 
 #[server(Recipes)]
 pub async fn recipes() -> Result<Vec<Recipe>, ServerFnError> {
-    debug!("loading state from server context");
+    tracing::debug!("loading state from server context");
     let state: AppState = server_context()
         .get::<AppState>()
         .ok_or_else(|| ServerFnError::ServerError("missing state".to_string()))?;
-    debug!("loading recipes from DB");
+    tracing::debug!("loading recipes from DB");
     Ok(state.repo.list().await?)
 }
 

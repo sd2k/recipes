@@ -5,9 +5,13 @@ edition.workspace = true
 publish.workspace = true
 
 [dependencies]
+async-trait.workspace = true
 recipe-app = { workspace = true, features = ["ssr"] }
 recipe-db = { workspace = true }
 recipe-repository = { workspace = true }
 recipe-server.workspace = true
+serde.workspace = true
 shuttle-axum = "0.34.1"
+shuttle-common = "0.34.1"
 shuttle-runtime = "0.34.1"
+shuttle-service = "0.34.1"
