@@ -5,6 +5,6 @@ edition = "2021"
 resolver = "2"
 
 [dependencies]
-dioxus-fullstack = { version = "0.4.1", features = ["web"] }
+dioxus-fullstack = { version = "0.4.1", features = ["router", "web"] }
 recipe-app.workspace = true
 tracing-wasm = { version = "0.2.0" }

@@ -1,4 +1,7 @@
 use dioxus::prelude::*;
+use dioxus_router::prelude::*;
+
+use crate::Route;
 
 pub fn Header(cx: Scope) -> Element {
     cx.render(rsx!(
@@ -31,8 +34,8 @@ pub fn Header(cx: Scope) -> Element {
             }
             div { class: "navbar-center hidden lg:flex",
                 ul { class: "menu menu-horizontal px-1",
-                    li { a { class: "mr-5 hover:text-white", "Recipes" } }
-                    li { a { class: "mr-5 hover:text-white", "Meal plans" } }
+                    li { Link { to: Route::RecipesPage {}, class: "mr-5 hover:text-white", "Recipes" } }
+                    li { Link { to: Route::MealPlansPage {}, class: "mr-5 hover:text-white", "Meal plans" } }
                 }
             }
             div { class: "navbar-end",

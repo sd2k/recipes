@@ -8,7 +8,7 @@ use dioxus_fullstack::{axum_adapter::DioxusRouterExt, prelude::*, server_fn_serv
 use tower::ServiceBuilder;
 use tower_http::{compression::CompressionLayer, trace::TraceLayer};
 
-use recipe_app::{app, server::AppState};
+use recipe_app::{server::AppState, Route};
 
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq, PartialOrd, Ord)]
 pub enum HotReload {
@@ -21,7 +21,7 @@ pub fn router(state: AppState, hot_reload: HotReload) -> Router {
     recipe_app::server::register_explicit();
 
     let assets_path = concat!(env!("CARGO_MANIFEST_DIR"), "/../recipe-web/dist");
-    let cfg = ServeConfigBuilder::new(app, ())
+    let cfg = ServeConfigBuilder::new_with_router(FullstackRouterConfig::<Route>::default())
         .assets_path(assets_path)
         .build();
 

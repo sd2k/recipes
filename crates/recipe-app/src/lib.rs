@@ -1,9 +1,11 @@
 #![allow(non_snake_case)]
 
 use dioxus::prelude::*;
+use dioxus_router::prelude::*;
+use serde::{Deserialize, Serialize};
 
 use crate::{
-    components::{Header, RecipeGrid, ScrapedRecipe},
+    components::{Header, MealPlansPage, RecipesPage, ScrapedRecipe},
     server::scrape_recipe,
 };
 
@@ -38,10 +40,19 @@ fn Scraper(cx: Scope) -> Element {
     ))
 }
 
-pub fn app(cx: Scope) -> Element {
-    log::info!("Rendering app");
+pub fn Wrapper(cx: Scope) -> Element {
     cx.render(rsx!(
         Header {}
-        RecipeGrid {}
+        Outlet::<Route> {}
     ))
+}
+
+#[derive(Clone, Routable, Debug, PartialEq, Serialize, Deserialize)]
+#[rustfmt::skip]
+pub enum Route {
+    #[layout(Wrapper)]
+        #[route("/")]
+        RecipesPage {},
+        #[route("/plans")]
+        MealPlansPage {},
 }

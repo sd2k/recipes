@@ -20,6 +20,7 @@ diesel = "2.0.2"
 diesel-async = "0.4.1"
 dioxus = "0.4.0"
 dioxus-desktop = "0.4.0"
+dioxus-router = "0.4.0"
 dioxus-ssr = "0.4.0"
 dioxus-web = "0.4.0"
 futures-util = "0.3.25"
@@ -56,5 +57,7 @@ codegen-units = 1
 dioxus = { git = "https://github.com/sd2k/dioxus" }
 dioxus-desktop = { git = "https://github.com/sd2k/dioxus" }
 dioxus-fullstack = { git = "https://github.com/sd2k/dioxus" }
+dioxus-router = { git = "https://github.com/sd2k/dioxus" }
 dioxus-ssr = { git = "https://github.com/sd2k/dioxus" }
 dioxus-web = { git = "https://github.com/sd2k/dioxus" }
+dioxus-html-macro = { git = "https://github.com/sd2k/dioxus-html-macro", branch = "syn-2-dioxus-0.4" }

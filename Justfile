@@ -15,6 +15,9 @@ default:
 build-desktop:
   cd crates/recipe-desktop && dx build --platform desktop
 
+build-desktop-prod:
+  cd crates/recipe-desktop && dx build --platform desktop --release
+
 run-desktop: build-desktop
   cd crates/recipe-desktop && cargo run
 
@@ -24,19 +27,25 @@ watch-desktop: build-desktop
 build-web:
   cd crates/recipe-web && dx build
 
+build-web-prod:
+  cd crates/recipe-web && dx build --profile release-web
+
 watch-web:
   cd crates/recipe-web && cargo watch -s 'dx build'
   
-run-server: build-web
+run-server:
   cd crates/recipe-server && cargo run
 
-watch-server: build-web
+run-server-prod:
+  cd crates/recipe-server && cargo run --profile release
+
+watch-server:
   cd crates/recipe-server && cargo watch -x run
 
-run-shuttle: build-web
+run-shuttle:
   cd crates/recipe-shuttle && cargo shuttle run
 
-watch-shuttle: build-web
+watch-shuttle:
   cd crates/recipe-shuttle && cargo watch -x 'shuttle run'
 
 tailwind:

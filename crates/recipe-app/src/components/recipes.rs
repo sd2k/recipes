@@ -1,5 +1,6 @@
 use dioxus::prelude::*;
 use dioxus_fullstack::prelude::*;
+use dioxus_html_macro::html;
 
 use recipe_shared::Recipe;
 
@@ -37,5 +38,17 @@ fn RecipeCard(cx: Scope<RecipeCardProps>) -> Element {
                 cx.props.recipe.notes.as_ref().map(|n| rsx!(p { "{n}" }))
             }
         }
+    ))
+}
+
+pub fn RecipesPage(cx: Scope) -> Element {
+    cx.render(html!(
+        <div>
+            <div class="container mx-auto">
+                <RecipeGrid />
+            </div>
+            <dialog id="new-recipe" class="modal">
+            </dialog>
+        </div>
     ))
 }

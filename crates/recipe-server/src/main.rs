@@ -24,7 +24,7 @@ async fn main() {
     let repo = recipe_repository::DieselRepository::new(pool);
     let state = AppState::new(repo);
     axum::Server::bind(&addr)
-        .serve(recipe_server::router(state, Default::default()).into_make_service())
+        .serve(recipe_server::router(state, recipe_server::HotReload::On).into_make_service())
         .await
         .unwrap()
 }
