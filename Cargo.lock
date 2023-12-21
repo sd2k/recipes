@@ -1021,6 +1021,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "dioxus-class"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3dde58998ffbc87c0e797200a6d3e7593edf2979d96d9c05c52d33a5b44bef3a"
+dependencies = [
+ "dioxus",
+ "paste",
+]
+
+[[package]]
 name = "dioxus-core"
 version = "0.4.3"
 source = "git+https://github.com/sd2k/dioxus#7edac1b234c19b4090c768473c2ed0702a7a798d"
@@ -1048,6 +1058,17 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 2.0.39",
+]
+
+[[package]]
+name = "dioxus-daisyui"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e454ecdc6091341abbccc2b418676e51b8a435cece9cf7c5d826bf596765413d"
+dependencies = [
+ "dioxus",
+ "dioxus-tailwindcss",
+ "lazy_static",
 ]
 
 [[package]]
@@ -1256,6 +1277,16 @@ dependencies = [
  "thiserror",
  "tokio",
  "tracing",
+]
+
+[[package]]
+name = "dioxus-tailwindcss"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5818f21c1847f505b4f7831f9cb6508451eb3d35aefc806a455ac8501ad2a70e"
+dependencies = [
+ "dioxus",
+ "dioxus-class",
 ]
 
 [[package]]
@@ -3394,6 +3425,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "paste"
+version = "1.0.14"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "de3145af08024dea9fa9914f381a17b8fc6034dfb00f3a84013f7ff43f29ed4c"
+
+[[package]]
 name = "pem"
 version = "3.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3882,6 +3919,7 @@ dependencies = [
  "anyhow",
  "chrono",
  "dioxus",
+ "dioxus-daisyui",
  "dioxus-fullstack",
  "log",
  "recipe-db",
@@ -3991,12 +4029,16 @@ dependencies = [
 name = "recipe-shuttle"
 version = "0.1.0"
 dependencies = [
+ "async-trait",
  "recipe-app",
  "recipe-db",
  "recipe-repository",
  "recipe-server",
+ "serde",
  "shuttle-axum",
+ "shuttle-common",
  "shuttle-runtime",
+ "shuttle-service",
 ]
 
 [[package]]

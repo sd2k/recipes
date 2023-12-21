@@ -120,6 +120,7 @@ fn main() -> Result<()> {
             notes: Some("Delicious!"),
             prep_time_minutes: Some(15),
             cooking_time_minutes: Some(15),
+            image_url: Some("https://images.immediate.co.uk/production/volatile/sites/30/2020/08/recipe-image-legacy-id-281737_11-ba026f3.jpg"),
         },
         vec![
             models::NewRecipeIngredient {

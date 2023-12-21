@@ -19,4 +19,5 @@ pub struct ScrapedRecipe {
     pub cooking_time_minutes: Option<u32>,
     pub servings: Option<u32>,
     pub ingredients: Vec<ScrapedIngredient>,
+    pub image_url: Option<String>,
 }

@@ -9,9 +9,15 @@ use tower::ServiceBuilder;
 use tower_http::{compression::CompressionLayer, trace::TraceLayer};
 
 use recipe_app::{app, server::AppState};
-use tracing::debug;
 
-pub fn router(state: AppState) -> Router {
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, PartialOrd, Ord)]
+pub enum HotReload {
+    On,
+    #[default]
+    Off,
+}
+
+pub fn router(state: AppState, hot_reload: HotReload) -> Router {
     recipe_app::server::register_explicit();
 
     let assets_path = concat!(env!("CARGO_MANIFEST_DIR"), "/../recipe-web/dist");
@@ -20,14 +26,11 @@ pub fn router(state: AppState) -> Router {
         .build();
 
     let ssr_state = SSRState::new(&cfg);
-    Router::new()
+    let mut router = Router::new()
         .serve_static_assets(assets_path)
-        .connect_hot_reload()
         .register_server_fns_with_handler("", |func| {
             let state = state.clone();
             move |req| async move {
-                debug!("injecting state into server fn");
-
                 let mut server_context = DioxusServerContext::default();
                 if server_context.insert(state).is_err() {
                     return Response::builder()
@@ -48,7 +51,11 @@ pub fn router(state: AppState) -> Router {
                     }
                 }
             }
-        })
+        });
+    if matches!(hot_reload, HotReload::On) {
+        router = router.connect_hot_reload();
+    }
+    router
         .fallback(get(render_handler_with_context).with_state((
             move |cfg| cfg.insert(state.clone()).unwrap(),
             cfg,

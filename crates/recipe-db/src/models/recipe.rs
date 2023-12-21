@@ -42,6 +42,7 @@ pub struct Recipe {
     pub notes: Option<String>,
     pub prep_time_minutes: Option<i32>,
     pub cooking_time_minutes: Option<i32>,
+    pub image_url: Option<String>,
 }
 
 impl Recipe {
@@ -95,4 +96,5 @@ pub struct NewRecipe<'a> {
     pub notes: Option<&'a str>,
     pub prep_time_minutes: Option<i32>,
     pub cooking_time_minutes: Option<i32>,
+    pub image_url: Option<&'a str>,
 }

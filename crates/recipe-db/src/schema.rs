@@ -72,6 +72,7 @@ diesel::table! {
         notes -> Nullable<Text>,
         prep_time_minutes -> Nullable<Int4>,
         cooking_time_minutes -> Nullable<Int4>,
+        image_url -> Nullable<Text>,
     }
 }
 

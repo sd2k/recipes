@@ -1,8 +1,7 @@
-use recipe_app::server::AppState;
 use tracing_error::ErrorLayer;
 use tracing_subscriber::{prelude::*, EnvFilter};
 
-// use recipe_db::create_pool;
+use recipe_app::server::AppState;
 
 pub fn setup_tracing() {
     let filter_layer = EnvFilter::try_from_default_env()
@@ -25,7 +24,7 @@ async fn main() {
     let repo = recipe_repository::DieselRepository::new(pool);
     let state = AppState::new(repo);
     axum::Server::bind(&addr)
-        .serve(recipe_server::router(state).into_make_service())
+        .serve(recipe_server::router(state, Default::default()).into_make_service())
         .await
         .unwrap()
 }
