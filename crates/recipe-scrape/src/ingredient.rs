@@ -1,9 +1,13 @@
-//! Functionality for converting raw ingredient strings into structured data.
+//! Functionality for converting raw ingredient strings into structured data
+//! with canonical units (ideally SI units, with some exceptions).
 //!
-//! For example, the string "1/2 cup sugar" should be converted into an
-//! ingredient with name "sugar", amount "1/2", and unit "cup".
+//! For example, the string "1/2 cup sugar" should be parsed into an
+//! ingredient with name "sugar", amount "1/2", and unit "cup"; and
+//! formatted as "142g sugar" (since 1 cup is 284g).
+//! TODO: figure out how to determine whether the 'cup' refers to volume or mass...
+//! Maybe just hardcode some common ingredients, their state, and their densities?
 
-use std::str::FromStr;
+use std::{fmt, str::FromStr};
 
 use serde::{Deserialize, Serialize};
 
@@ -41,6 +45,35 @@ impl ScrapedIngredient {
     }
 }
 
+impl fmt::Display for ScrapedIngredient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match (self.canonicalize(), &self.name) {
+            (Some((mut amount, mut unit)), Some(name)) => {
+                if amount < 1.0 && unit.smaller_prefix().is_some() {
+                    amount *= 1000.0;
+                    unit = unit.smaller_prefix().unwrap();
+                } else if amount > 1000.0 && unit.larger_prefix().is_some() {
+                    amount /= 1000.0;
+                    unit = unit.larger_prefix().unwrap();
+                }
+                if amount > 10.0 {
+                    amount = amount.round();
+                }
+                if amount.fract() == 0.0 {
+                    write!(f, "{}{} {}", amount as u64, unit, name)?;
+                    if let Some(instructions) = &self.instructions {
+                        write!(f, ", {}", instructions)?;
+                    }
+                    Ok(())
+                } else {
+                    write!(f, "{}{} {}", amount, unit, name)
+                }
+            }
+            _ => write!(f, "{}", self.raw),
+        }
+    }
+}
+
 trait Canonicalize {
     fn canonicalize(&self) -> f64;
 }
@@ -58,8 +91,24 @@ impl Unit {
     fn canonical_unit(&self) -> Self {
         match self {
             Self::Mass(_) => Self::Mass(MassUnit::Grams),
-            Self::Volume(_) | Self::Spoon(_) => Self::Volume(VolumeUnit::Litres),
-            Self::Other(_) => self.clone(),
+            Self::Volume(_) => Self::Volume(VolumeUnit::Litres),
+            _ => self.clone(),
+        }
+    }
+
+    fn smaller_prefix(&self) -> Option<Self> {
+        match self {
+            Self::Mass(mass) => mass.smaller_prefix().map(Self::Mass),
+            Self::Volume(volume) => volume.smaller_prefix().map(Self::Volume),
+            Self::Spoon(_) | Self::Other(_) => None,
+        }
+    }
+
+    fn larger_prefix(&self) -> Option<Self> {
+        match self {
+            Self::Mass(mass) => mass.larger_prefix().map(Self::Mass),
+            Self::Volume(volume) => volume.larger_prefix().map(Self::Volume),
+            Self::Spoon(_) | Self::Other(_) => None,
         }
     }
 }
@@ -91,13 +140,46 @@ impl FromStr for Unit {
     }
 }
 
+impl fmt::Display for Unit {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Self::Mass(mass) => write!(f, "{}", mass),
+            Self::Volume(volume) => write!(f, "{}", volume),
+            Self::Spoon(spoon) => write!(f, "{}", spoon),
+            Self::Other(other) => write!(f, "{}", other),
+        }
+    }
+}
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum MassUnit {
+    Milligrams,
     Grams,
     Kilograms,
-    Milligrams,
     Pounds,
     Ounces,
+}
+
+impl MassUnit {
+    fn smaller_prefix(&self) -> Option<Self> {
+        match self {
+            Self::Milligrams => None,
+            Self::Grams => Some(Self::Milligrams),
+            Self::Kilograms => Some(Self::Grams),
+            Self::Pounds => None,
+            Self::Ounces => None,
+        }
+    }
+
+    fn larger_prefix(&self) -> Option<Self> {
+        match self {
+            Self::Milligrams => Some(Self::Grams),
+            Self::Grams => Some(Self::Kilograms),
+            Self::Kilograms => None,
+            Self::Pounds => Some(Self::Ounces),
+            Self::Ounces => None,
+        }
+    }
 }
 
 impl FromStr for MassUnit {
@@ -105,9 +187,9 @@ impl FromStr for MassUnit {
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
+            "mg" | "milligram" | "milligrams" => Ok(Self::Milligrams),
             "g" | "gram" | "grams" => Ok(Self::Grams),
             "kg" | "kilogram" | "kilograms" => Ok(Self::Kilograms),
-            "mg" | "milligram" | "milligrams" => Ok(Self::Milligrams),
             "lb" | "pound" | "pounds" => Ok(Self::Pounds),
             "oz" | "ounce" | "ounces" => Ok(Self::Ounces),
             _ => Err(Error::ParsingUnit(s.to_string())),
@@ -127,6 +209,22 @@ impl Canonicalize for MassUnit {
     }
 }
 
+impl fmt::Display for MassUnit {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(
+            f,
+            "{}",
+            match self {
+                Self::Grams => "g",
+                Self::Kilograms => "kg",
+                Self::Milligrams => "mg",
+                Self::Pounds => "lb",
+                Self::Ounces => "oz",
+            }
+        )
+    }
+}
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum VolumeUnit {
     Millilitres,
@@ -137,6 +235,34 @@ pub enum VolumeUnit {
     Pints,
     Quarts,
     Gallons,
+}
+
+impl VolumeUnit {
+    fn smaller_prefix(&self) -> Option<Self> {
+        match self {
+            Self::Millilitres => None,
+            Self::Litres => Some(Self::Millilitres),
+            Self::Teaspoons => None,
+            Self::Tablespoons => None,
+            Self::Cups => None,
+            Self::Pints => None,
+            Self::Quarts => None,
+            Self::Gallons => None,
+        }
+    }
+
+    fn larger_prefix(&self) -> Option<Self> {
+        match self {
+            Self::Millilitres => Some(Self::Litres),
+            Self::Litres => None,
+            Self::Teaspoons => None,
+            Self::Tablespoons => None,
+            Self::Cups => None,
+            Self::Pints => None,
+            Self::Quarts => None,
+            Self::Gallons => None,
+        }
+    }
 }
 
 impl Canonicalize for VolumeUnit {
@@ -172,6 +298,25 @@ impl FromStr for VolumeUnit {
     }
 }
 
+impl fmt::Display for VolumeUnit {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(
+            f,
+            "{}",
+            match self {
+                Self::Millilitres => "ml",
+                Self::Litres => "l",
+                Self::Teaspoons => "tsp",
+                Self::Tablespoons => "tbsp",
+                Self::Cups => "cup",
+                Self::Pints => "pint",
+                Self::Quarts => "quart",
+                Self::Gallons => "gallon",
+            }
+        )
+    }
+}
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum SpoonUnit {
     Teaspoons,
@@ -196,6 +341,19 @@ impl Canonicalize for SpoonUnit {
             Self::Teaspoons => 0.005,
             Self::Tablespoons => 0.015,
         }
+    }
+}
+
+impl fmt::Display for SpoonUnit {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(
+            f,
+            "{}",
+            match self {
+                Self::Teaspoons => "tsp",
+                Self::Tablespoons => "tbsp",
+            }
+        )
     }
 }
 
@@ -297,7 +455,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn smoke() {
+    fn parse() {
         let cases = [
             (
                 "1/2 cup sugar",
@@ -404,6 +562,152 @@ mod tests {
 
         for (input, expected) in cases.iter() {
             let actual = input.parse::<ScrapedIngredient>().unwrap();
+            assert_eq!(actual, *expected);
+        }
+    }
+
+    #[test]
+    fn display() {
+        let cases = [
+            (
+                ScrapedIngredient {
+                    raw: "1/2 cup sugar".to_string(),
+                    name: Some("sugar".to_string()),
+                    amount: Some(0.5),
+                    unit: Some(Unit::Volume(VolumeUnit::Cups)),
+                    instructions: None,
+                },
+                "142ml sugar", // TODO: figure out how to convert this from volume to mass...
+            ),
+            (
+                ScrapedIngredient {
+                    raw: "1 tomato, chopped".to_string(),
+                    name: Some("tomato".to_string()),
+                    amount: Some(1.0),
+                    unit: None,
+                    instructions: Some("chopped".to_string()),
+                },
+                "1 tomato, chopped",
+            ),
+            (
+                ScrapedIngredient {
+                    raw: "200g cashews".to_string(),
+                    name: Some("cashews".to_string()),
+                    amount: Some(200.0),
+                    unit: Some(Unit::Mass(MassUnit::Grams)),
+                    instructions: None,
+                },
+                "200g cashews",
+            ),
+            (
+                ScrapedIngredient {
+                    raw: "100ml milk".to_string(),
+                    name: Some("milk".to_string()),
+                    amount: Some(100.0),
+                    unit: Some(Unit::Volume(VolumeUnit::Millilitres)),
+                    instructions: None,
+                },
+                "100ml milk",
+            ),
+            (
+                ScrapedIngredient {
+                    raw: "400g rigatoni or penne".to_string(),
+                    name: Some("rigatoni or penne".to_string()),
+                    amount: Some(400.0),
+                    unit: Some(Unit::Mass(MassUnit::Grams)),
+                    instructions: None,
+                },
+                "400g rigatoni or penne",
+            ),
+            (
+                ScrapedIngredient {
+                    raw: "4 garlic cloves, sliced".to_string(),
+                    name: Some("garlic cloves".to_string()),
+                    amount: Some(4.0),
+                    unit: None,
+                    instructions: Some("sliced".to_string()),
+                },
+                "4 garlic cloves, sliced",
+            ),
+            (
+                ScrapedIngredient {
+                    raw: "125g ball mozzarella, chopped into chunks".to_string(),
+                    name: Some("ball mozzarella".to_string()),
+                    amount: Some(125.0),
+                    unit: Some(Unit::Mass(MassUnit::Grams)),
+                    instructions: Some("chopped into chunks".to_string()),
+                },
+                "125g ball mozzarella, chopped into chunks",
+            ),
+            (
+                ScrapedIngredient {
+                    raw: "¼ white cabbage, finely shredded".to_string(),
+                    name: Some("white cabbage".to_string()),
+                    amount: Some(0.25),
+                    unit: None,
+                    instructions: Some("finely shredded".to_string()),
+                },
+                "¼ white cabbage, finely shredded",
+            ),
+            (
+                ScrapedIngredient {
+                    raw: "0.8kg lamb, shoulder or leg, cut into large chunks".to_string(),
+                    // Can't really do anything about the "shoulder or leg" part.
+                    name: Some("lamb".to_string()),
+                    amount: Some(0.8),
+                    unit: Some(Unit::Mass(MassUnit::Kilograms)),
+                    instructions: Some("shoulder or leg, cut into large chunks".to_string()),
+                },
+                "800g lamb, shoulder or leg, cut into large chunks",
+            ),
+            (
+                ScrapedIngredient {
+                    raw: "tomato ketchup, to serve (optional)".to_string(),
+                    name: Some("tomato ketchup".to_string()),
+                    amount: None,
+                    unit: None,
+                    instructions: Some("to serve (optional)".to_string()),
+                },
+                "tomato ketchup, to serve (optional)",
+            ),
+        ];
+
+        for (input, expected) in cases.iter() {
+            let actual = input.to_string();
+            assert_eq!(actual, *expected);
+        }
+    }
+
+    #[test]
+    fn round_trip() {
+        let cases = [
+            ("1/2 cup sugar", "142ml sugar"), // TODO: figure out how to convert this from volume to mass...
+            ("1 tomato, chopped", "1 tomato, chopped"),
+            ("200g cashews", "200g cashews"),
+            ("100ml milk", "100ml milk"),
+            ("400g rigatoni or penne", "400g rigatoni or penne"),
+            ("4 garlic cloves, sliced", "4 garlic cloves, sliced"),
+            (
+                "125g ball mozzarella, chopped into chunks",
+                "125g ball mozzarella, chopped into chunks",
+            ),
+            (
+                "¼ white cabbage, finely shredded",
+                "¼ white cabbage, finely shredded",
+            ),
+            (
+                "0.8kg lamb, shoulder or leg, cut into large chunks",
+                "800g lamb, shoulder or leg, cut into large chunks",
+            ),
+            (
+                "tomato ketchup, to serve (optional)",
+                "tomato ketchup, to serve (optional)",
+            ),
+            ("6 oz cream cheese, cold", "170g cream cheese, cold"),
+            ("½ teaspoon ground ginger", "2.5ml ground ginger"),
+        ];
+        for (input, expected) in cases.iter() {
+            let actual = input.parse::<ScrapedIngredient>().unwrap().to_string();
             assert_eq!(actual, *expected);
         }
     }
