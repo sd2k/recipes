@@ -25,10 +25,10 @@ watch-desktop: build-desktop
   cd crates/recipe-desktop && cargo watch -x run
 
 build-web:
-  cd crates/recipe-web && dx build
+  cd crates/recipe-web && dx build && fd --type f --exclude '*.br' . dist -x brotli -fs -q 5
 
 build-web-prod:
-  cd crates/recipe-web && dx build --profile release-web
+  cd crates/recipe-web && dx build --profile release-web && fd --type f --exclude '*.br' . dist -x brotli -fs
 
 watch-web:
   cd crates/recipe-web && cargo watch -s 'dx build'
