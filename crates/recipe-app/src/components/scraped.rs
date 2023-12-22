@@ -1,33 +1,21 @@
 use dioxus::prelude::*;
 
-#[derive(Props, PartialEq)]
-struct ScrapedIngredientProps {
-    ingredient: recipe_scrape::ScrapedIngredient,
-}
-
-fn ScrapedIngredient(cx: Scope<ScrapedIngredientProps>) -> Element {
-    let ingredient = &cx.props.ingredient;
-    let name = ingredient.name.as_deref().unwrap_or("unknown ingredient!");
+#[component]
+fn ScrapedIngredient(cx: Scope, ingredient: recipe_scrape::ScrapedIngredient) -> Element {
     cx.render(rsx!(
         li {
-            // span { "{ingredient.amount}" }
-            // ingredient.unit.map(|u| rsx!(span { "{u}" }))
-            span { "{name}" }
+            span { "{ingredient}" }
         }
     ))
 }
 
-#[derive(Props, PartialEq)]
-pub struct ScrapedRecipeProps {
-    recipe: recipe_scrape::ScrapedRecipe,
-}
-
-pub fn ScrapedRecipe(cx: Scope<ScrapedRecipeProps>) -> Element {
+#[component]
+pub fn ScrapedRecipe(cx: Scope, recipe: recipe_scrape::ScrapedRecipe) -> Element {
     cx.render(rsx!(
-        h1 { "{cx.props.recipe.name}" }
+        h1 { "{recipe.name}" }
         h2 { "Ingredients" }
         ul {
-            cx.props.recipe.ingredients.iter().map(|ingredient| {
+            recipe.ingredients.iter().map(|ingredient| {
                 rsx!(ScrapedIngredient { ingredient: ingredient.clone() })
             })
         }
