@@ -1228,6 +1228,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "dioxus-query"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a1f0ae4a31bdf98ef6ede0d1313a1ec8ac49457295524f49a2e577c3e4a88fb0"
+dependencies = [
+ "dioxus",
+ "futures-util",
+ "instant",
+]
+
+[[package]]
 name = "dioxus-router"
 version = "0.4.3"
 source = "git+https://github.com/sd2k/dioxus#932df2c65d55b0dcae1a7eef1cc91a9582dba57a"
@@ -2520,6 +2531,9 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7a5bbe824c507c5da5956355e86a746d82e0e1464f65d862cc5e71da70e94b2c"
 dependencies = [
  "cfg-if",
+ "js-sys",
+ "wasm-bindgen",
+ "web-sys",
 ]
 
 [[package]]
@@ -3933,6 +3947,7 @@ dependencies = [
  "dioxus-daisyui",
  "dioxus-fullstack",
  "dioxus-html-macro",
+ "dioxus-query",
  "dioxus-router",
  "log",
  "recipe-db",

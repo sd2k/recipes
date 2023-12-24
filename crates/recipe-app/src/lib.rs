@@ -4,12 +4,17 @@ use dioxus::prelude::*;
 use dioxus_router::prelude::*;
 use serde::{Deserialize, Serialize};
 
-use crate::components::{Header, MealPlansPage, RecipesPage};
+use crate::{
+    components::{Header, MealPlansPage, RecipesPage},
+    hooks::use_init,
+};
 
 mod components;
+mod hooks;
 pub mod server;
 
 pub fn Wrapper(cx: Scope) -> Element {
+    use_init(cx);
     cx.render(rsx!(
         Header {}
         Outlet::<Route> {}

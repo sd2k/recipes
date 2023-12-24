@@ -10,6 +10,7 @@ dioxus.workspace = true
 dioxus-daisyui = "0.4.0"
 dioxus-fullstack = { version = "0.4.1" }
 dioxus-html-macro = "0.3.0"
+dioxus-query = "0.4.0"
 dioxus-router.workspace = true
 log = "0.4.17"
 recipe-db = { workspace = true, optional = true }

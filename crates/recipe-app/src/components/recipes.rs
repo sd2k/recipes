@@ -1,25 +1,28 @@
 use dioxus::prelude::*;
-use dioxus_fullstack::prelude::*;
 use dioxus_html_macro::html;
+use dioxus_query::prelude::*;
 
 use recipe_shared::Recipe;
 
 use crate::{
     components::ScrapedRecipe,
-    server::{recipes, scrape_recipe},
+    hooks::{use_recipes, QueryValue},
+    server::scrape_recipe,
 };
 
 pub fn RecipeGrid(cx: Scope) -> Element {
-    let recipes = use_server_future(cx, (), |()| async move { recipes().await.unwrap() })?;
-    log::info!("recipes: {:?}", recipes.value());
-
-    cx.render(rsx!(
-        div { class: "grid grid-cols-2 md:grid-cols-6 gap-4 p-4",
-            recipes.value().iter().map(|recipe| {
-                rsx!(RecipeCard { key: "{recipe.name}", recipe: recipe.clone() })
-            })
-        }
-    ))
+    let recipes = use_recipes(cx);
+    cx.render(match recipes.result().value() {
+        QueryResult::Ok(QueryValue::Recipes(rs)) => rsx!(
+            div { class: "grid grid-cols-2 md:grid-cols-6 gap-4 p-4",
+                rs.iter().map(|recipe| {
+                    rsx!(RecipeCard { key: "{recipe.name}", recipe: recipe.clone() })
+                })
+            }
+        ),
+        QueryResult::Err(_) => rsx!(div { "error" }),
+        QueryResult::Loading(_) => rsx!(div { "loading" }),
+    })
 }
 
 #[component]
