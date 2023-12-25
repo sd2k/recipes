@@ -11,7 +11,7 @@ edition = "2021"
 publish = false
 
 [workspace.dependencies]
-anyhow = "1.0.68"
+anyhow = "1.0.76"
 async-trait = "0.1.51"
 axum = "0.6.1"
 bigdecimal = "0.4.1"
