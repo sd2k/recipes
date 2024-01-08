@@ -15,4 +15,4 @@ path = "gen/bin/desktop.rs"
 dioxus.workspace = true
 dioxus-desktop.workspace = true
 mobile-entry-point = "0.1.1"
-simple_logger = "4.0.0"
+simple_logger = "4.3.3"
