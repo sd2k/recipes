@@ -12,6 +12,6 @@ recipe-repository = { workspace = true }
 recipe-server.workspace = true
 serde.workspace = true
 shuttle-axum = "0.35.1"
-shuttle-common = "0.35.1"
+shuttle-common = "0.42.0"
 shuttle-runtime = "0.35.1"
 shuttle-service = "0.35.1"
