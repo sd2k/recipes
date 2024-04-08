@@ -14,4 +14,4 @@ serde.workspace = true
 shuttle-axum = "0.35.1"
 shuttle-common = "0.35.1"
 shuttle-runtime = "0.35.1"
-shuttle-service = "0.35.1"
+shuttle-service = "0.43.0"
