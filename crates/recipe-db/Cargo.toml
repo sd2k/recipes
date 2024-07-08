@@ -7,7 +7,7 @@ edition = "2021"
 anyhow = { workspace = true }
 bigdecimal = { workspace = true }
 chrono = { workspace = true }
-derive_more = "0.99.17"
+derive_more = "0.99.18"
 diesel = { workspace = true, features = ["chrono", "numeric", "postgres"] }
 diesel-async = { workspace = true, features = ["deadpool", "postgres"] }
 diesel-derive-newtype = "2.0.0"
